@@ -4,6 +4,7 @@ MetronAgent.dropsondeUnmarshaller.receivedEnvelopes
 MetronAgent.dropsondeAgentListener.receivedMessageCount
 LoggregatorTrafficController.memoryStats.numBytesAllocated
 MetronAgent.numCPUS
+MetronAgent.udp.sentMessageCount
 LoggregatorTrafficController.memoryStats.numBytesAllocatedStack
 MetronAgent.memoryStats.numBytesAllocatedStack
 LoggregatorTrafficController.numCPUS

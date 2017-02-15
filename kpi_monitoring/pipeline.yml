@@ -25,5 +25,6 @@ jobs:
           - |
             #!/bin/bash
             set -ex
-
-            platform-monitoring/kpi_monitoring/runValidator.sh
+            pushd platform-monitoring/kpi_monitoring
+              ./runValidator.sh
+            popd
