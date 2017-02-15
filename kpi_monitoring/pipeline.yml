@@ -1,0 +1,29 @@
+resources:
+- name: platform-monitoring
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/platform-monitoring
+    branch: master
+    private_key: {{metrix-git-key}}
+
+jobs:
+- name: validate-kpis
+  plan:
+  - get: platform-monitoring
+  - task: compare-kpis
+    config:
+      platform: linux
+      image: docker:///pivotalcf/1.7_metrix
+
+      inputs:
+      - name: platform-monitoring
+
+      run:
+        path: bash
+        args:
+          - -c
+          - |
+            #!/bin/bash
+            set -ex
+
+            platform-monitoring/kpi_monitoring/runValidator.sh
