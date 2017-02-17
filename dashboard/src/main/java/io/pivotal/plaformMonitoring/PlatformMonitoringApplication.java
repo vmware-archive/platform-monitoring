@@ -7,10 +7,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class PlatformMonitoringApplication {
 
     public static void main(String[] args) {
-        System.setProperty("jmx.interval", "30000");
-        System.setProperty("jmx.serviceURL", "service:jmx:rmi://104.196.221.222:44445/jndi/rmi://104.196.221.222:44444/jmxrmi");
-        System.setProperty("jmx.username", "root");
-        System.setProperty("jmx.password", "root");
+        System.setProperty("jmx.interval", System.getenv("JMX_INTERVAL"));
+        System.setProperty("jmx.serviceURL", System.getenv("JMX_SERVICE_URL"));
+        System.setProperty("jmx.username", System.getenv("JMX_USERNAME"));
+        System.setProperty("jmx.password", System.getenv("JMX_PASSWORD"));
+        System.out.println("Running with System property: jmx.interval"+System.getenv("JMX_INTERVAL"));
+        System.out.println("Running with System property: jmx.serviceURL"+System.getenv("JMX_SERVICE_URL"));
+        System.out.println("Running with System property: jmx.username"+System.getenv("JMX_USERNAME"));
+        System.out.println("Running with System property: jmx.password ********");
         SpringApplication.run(PlatformMonitoringApplication.class, args);
     }
 }
