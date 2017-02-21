@@ -36,6 +36,7 @@ public class Validator {
         createConnection();
         Set<String> kpis = readMetrics();
         Set<String> receivedMetrics = new HashSet<>();
+        Set<String> fullMetrics = new HashSet<>();
         MBeanServerConnection mbeanConn = jmxConnector.getMBeanServerConnection();
         String queryName = String.format("*:deployment=%1s,job=*,index=*,ip=*,*", CF_DEPLOYMENT_NAME);
         System.out.println("Started Capturing Metrics: "+Calendar.getInstance().getTime());
@@ -44,6 +45,7 @@ public class Validator {
             for(ObjectName name : names) {
                 for (MBeanAttributeInfo attr : mbeanConn.getMBeanInfo(name).getAttributes()) {
                     receivedMetrics.add(attr.getName().replaceAll(NOZZLE_PREFIX, ""));
+                    fullMetrics.add(name+":"+attr.getName().replaceAll(NOZZLE_PREFIX, ""));
                 }
             }
             Thread.sleep(POLL_INTERVAL*1000);
@@ -51,6 +53,16 @@ public class Validator {
         System.out.println("Stopped Capturing Metrics: "+Calendar.getInstance().getTime());
         System.out.println("Received "+receivedMetrics.size()+" metrics.");
         closeConnection();
+
+        System.out.println("*********************************RECEIVED METRICS***************************");
+        List<String> sortedMetrics = new ArrayList<String>();
+        sortedMetrics.addAll(fullMetrics);
+        Collections.sort(sortedMetrics);
+        for(String metric : sortedMetrics){
+            System.out.println(metric);
+        }
+        System.out.println("*********************************DONE RECEIVED METRICS***************************");
+
         boolean missingKpis = false;
         for(String metric : kpis){
             if(!receivedMetrics.contains(metric)) {
