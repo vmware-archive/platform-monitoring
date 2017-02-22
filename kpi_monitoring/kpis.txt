@@ -2,3 +2,9 @@ DopplerServer.doppler.shedEnvelopes
 DopplerServer.listeners.receivedEnvelopes
 DopplerServer.truncatingBuffer.totalDroppedMessages
 MetronAgent.dropsondeMarshaller.sentEnvelopes
+bbs.ConvergenceLRPDuration
+bbs.RequestLatency
+bbs.LRPsRunning
+bbs.LRPsDesired
+route_emitter.ConsulDownMode
+gorouter.latency
