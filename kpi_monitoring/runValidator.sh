@@ -2,7 +2,7 @@ mvn clean
 mvn package
 
 
-java -DHOSTNAME=104.196.221.222 \
+java -DHOSTNAME=104.196.100.8 \
      -DUSERNAME=root \
      -DPASSWORD=root \
      -DCF_DEPLOYMENT_NAME=cf \
