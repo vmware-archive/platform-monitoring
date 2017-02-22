@@ -1,4 +1,4 @@
-dopplerServer.doppler.shedEnvelopes
-dopplerServer.listeners.receivedEnvelopes
-dopplerServer.truncatingBuffer.totalDroppedMessages
+DopplerServer.doppler.shedEnvelopes
+DopplerServer.listeners.receivedEnvelopes
+DopplerServer.truncatingBuffer.totalDroppedMessages
 MetronAgent.dropsondeMarshaller.sentEnvelopes
