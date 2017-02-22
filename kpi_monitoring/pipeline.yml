@@ -26,5 +26,6 @@ jobs:
             #!/bin/bash
             set -ex
             pushd platform-monitoring/kpi_monitoring
+              ./trigger-event-metrics.sh
               ./runValidator.sh
             popd

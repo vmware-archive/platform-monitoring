@@ -65,7 +65,7 @@ public class Validator {
 
         boolean missingKpis = false;
         for(String metric : kpis){
-            if(!receivedMetrics.contains(metric)) {
+            if(!metric.isEmpty() && !receivedMetrics.contains(metric)) {
                 missingKpis = true;
                 System.out.println("MISSING KPI: "+metric);
             }
