@@ -1,3 +1,12 @@
+---
+env_params: &env_params
+  CF_USERNAME: {{kpi-validator-cf-username}}
+  CF_PASSWORD: {{kpi-validator-cf-password}}
+  CF_API: {{kpi-validator-cf-api}}
+  PROVIDER_IP: {{kpi-validator-provider-ip}}
+  PROVIDER_USERNAME: {{kpi-validator-provider-username}}
+  PROVIDER_PASSWORD: {{kpi-validator-provider-password}}
+
 resources:
 - name: platform-monitoring
   type: git
@@ -17,6 +26,9 @@ jobs:
 
       inputs:
       - name: platform-monitoring
+
+      params:
+        <<: *env_params
 
       run:
         path: bash

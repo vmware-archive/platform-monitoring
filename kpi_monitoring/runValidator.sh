@@ -3,9 +3,9 @@ mvn clean
 mvn package
 
 
-java -DHOSTNAME=104.196.100.8 \
-     -DUSERNAME=root \
-     -DPASSWORD=root \
+java -DHOSTNAME=$PROVIDER_IP \
+     -DUSERNAME=$PROVIDER_USERNAME \
+     -DPASSWORD=$PROVIDER_PASSWORD \
      -DCF_DEPLOYMENT_NAME=cf \
      -DNOZZLE_PREFIX=opentsdb.nozzle. \
      -DRUN_TIME_MINUTES=5 \

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-cf api  https://api.sys.fendi.gcp.pcf-metrics.com --skip-ssl-validation
-cf login -u admin -p SL-mzOK8qVO1iNgvuqWtu2WrfyWQyX-2 -o system -s system
+cf api  $CF_API --skip-ssl-validation
+cf login -u $CF_USERNAME -p $CF_PASSWORD -o system -s system
 
 cf create-quota QUOTA -m 50GB -i -1 || true
 
