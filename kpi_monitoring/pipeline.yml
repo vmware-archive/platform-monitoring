@@ -6,6 +6,9 @@ env_params: &env_params
   PROVIDER_IP: {{kpi-validator-provider-ip}}
   PROVIDER_USERNAME: {{kpi-validator-provider-username}}
   PROVIDER_PASSWORD: {{kpi-validator-provider-password}}
+  OPSMANAGER_URL: {{kpi-validator-opsmanager-url}}
+  OPSMANAGER_USERNAME: {{kpi-validator-opsmanager-username}}
+  OPSMANAGER_KEY: {{kpi-validator-opsmanager-key}}
 
 resources:
 - name: platform-monitoring
@@ -46,11 +49,14 @@ jobs:
           - |
             #!/bin/bash
             set -ex
+            export $OPSMANAGER_KEYPATH=$PWD/$OPSMANAGER_KEY
+            pushd platform-monitoring/kpi_monitoring
+              ./trigger-event-metrics.sh
+            popd
 
             pushd loggregator/src/tools/logspinner
               cf api  $CF_API --skip-ssl-validation
               cf login -u $CF_USERNAME -p $CF_PASSWORD -o system -s system
-              cf delete logspinner -r -f || true
               cf push logspinner
               cf scale -i 50 logspinner
               for i in {1..500}
@@ -61,6 +67,8 @@ jobs:
 
             pushd platform-monitoring/kpi_monitoring
               ./run_slow_consumer.sh
-              ./trigger-event-metrics.sh
               ./runValidator.sh
+              cf delete logspinner -r -f
+              ./run_kill_netcat.sh
             popd
+
