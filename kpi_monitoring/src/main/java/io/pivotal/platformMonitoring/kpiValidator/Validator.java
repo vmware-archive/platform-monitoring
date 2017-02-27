@@ -29,6 +29,7 @@ public class Validator {
             validator.run();
         }catch (Exception e){
             e.printStackTrace();
+            System.exit(1);
         }
     }
 

@@ -48,9 +48,15 @@ jobs:
             set -ex
 
             pushd loggregator/src/tools/logspinner
+              cf api  $CF_API --skip-ssl-validation
+              cf login -u $CF_USERNAME -p $CF_PASSWORD -o system -s system
               cf delete logspinner -r -f || true
               cf push logspinner
-              siege -k --time=10s https://logspinner.apps.prada.gcp.pcf-metrics.com/?delay=1ns\&cycles=10000000
+              cf scale -i 50 logspinner
+              for i in {1..500}
+              do
+                 curl -k https://logspinner.apps.prada.gcp.pcf-metrics.com/?delay=1ns\&cycles=10000000
+              done
             popd
 
             pushd platform-monitoring/kpi_monitoring
