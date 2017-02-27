@@ -14,11 +14,19 @@ resources:
     uri: git@github.com:pivotal-cf/platform-monitoring
     branch: master
     private_key: {{metrix-git-key}}
+- name: loggregator
+  type: git
+  source:
+    uri: git@github.com:cloudfoundry/loggregator
+    branch: master
+    private_key: {{metrix-git-key}}
+    tag_filter: v77
 
 jobs:
 - name: validate-kpis
   plan:
   - get: platform-monitoring
+  - get: loggregator
   - task: compare-kpis
     config:
       platform: linux
@@ -26,6 +34,7 @@ jobs:
 
       inputs:
       - name: platform-monitoring
+      - name: loggregator
 
       params:
         <<: *env_params
@@ -37,7 +46,15 @@ jobs:
           - |
             #!/bin/bash
             set -ex
+
+            pushd loggregator/src/tools/logspinner
+              cf delete logspinner -r -f || true
+              cf push logspinner
+              siege -k --time=10s https://logspinner.apps.prada.gcp.pcf-metrics.com/?delay=1ns\&cycles=10000000
+            popd
+
             pushd platform-monitoring/kpi_monitoring
+              ./run_slow_consumer.sh
               ./trigger-event-metrics.sh
               ./runValidator.sh
             popd
