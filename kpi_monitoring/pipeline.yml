@@ -17,6 +17,12 @@ resources:
     uri: git@github.com:pivotal-cf/platform-monitoring
     branch: master
     private_key: {{metrix-git-key}}
+- name: deployments-metrics
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/deployments-metrics
+    branch: master
+    private_key: {{metrix-git-key}}
 - name: loggregator
   type: git
   source:
@@ -30,6 +36,7 @@ jobs:
   plan:
   - get: platform-monitoring
   - get: loggregator
+  - get: deployments-metrics
   - task: compare-kpis
     config:
       platform: linux
@@ -38,6 +45,7 @@ jobs:
       inputs:
       - name: platform-monitoring
       - name: loggregator
+      - name: deployments-metrics
 
       params:
         <<: *env_params
@@ -53,6 +61,7 @@ jobs:
             cf login -u $CF_USERNAME -p $CF_PASSWORD -o system -s system
             cf delete logspinner -r -f
 
+            chmod 600 $OPSMANAGER_KEY
             export OPSMANAGER_KEYPATH=$PWD/$OPSMANAGER_KEY
             pushd platform-monitoring/kpi_monitoring
               ./trigger-event-metrics.sh
