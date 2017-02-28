@@ -8,7 +8,7 @@ bbs.LRPsRunning
 bbs.RequestLatency
 DopplerServer.doppler.shedEnvelopes
 DopplerServer.listeners.receivedEnvelopes
-DopplerServer.truncatingBuffer.totalDroppedMessages
+DopplerServer.TruncatingBuffer.totalDroppedMessages
 gorouter.latency
 MetronAgent.dropsondeMarshaller.sentEnvelopes
 route_emitter.ConsulDownMode
