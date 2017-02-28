@@ -60,6 +60,8 @@ jobs:
             cf api  $CF_API --skip-ssl-validation
             cf login -u $CF_USERNAME -p $CF_PASSWORD -o system -s system
             cf delete logspinner -r -f
+            cf create-user-provided-service prada-cups -l syslog://pcf.prada.gcp.pcf-metrics.com:12345 || true
+
 
             chmod 600 $OPSMANAGER_KEY
             export OPSMANAGER_KEYPATH=$PWD/$OPSMANAGER_KEY
@@ -72,6 +74,8 @@ jobs:
               cf login -u $CF_USERNAME -p $CF_PASSWORD -o system -s system
               cf push logspinner
               cf scale -i 50 logspinner
+              cf bind-service logspinner prada-cups || true
+              cf restage logspinner
               for i in {1..500}
               do
                  curl -k https://logspinner.apps.prada.gcp.pcf-metrics.com/?delay=1ns\&cycles=10000000
@@ -84,9 +88,10 @@ jobs:
               set +e
               ./runValidator.sh
               export exitStatus=`echo $?`
-
+              cf unbind-service logspinner prada-cups
+              cf delete-service prada-cups -f
               cf delete logspinner -r -f
               ./run_kill_netcat.sh
-              exit($exitStatus)
+              exit $exitStatus
             popd
 
