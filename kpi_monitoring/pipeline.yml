@@ -57,41 +57,37 @@ jobs:
           - |
             #!/bin/bash
             set -ex
+            chmod 600 $OPSMANAGER_KEY
+            export OPSMANAGER_KEYPATH=$PWD/$OPSMANAGER_KEY
+
             cf api  $CF_API --skip-ssl-validation
             cf login -u $CF_USERNAME -p $CF_PASSWORD -o system -s system
             cf delete logspinner -r -f
             cf create-user-provided-service prada-cups -l syslog://pcf.prada.gcp.pcf-metrics.com:12345 || true
+            cf create-quota QUOTA -m 50GB -i -1 || true
+            cf push test-app -p platform-monitoring/kpi_monitoring/assets/test-app.jar -m 50GB
+            cf delete test-app -f
+            cf delete-orphaned-routes -f
 
-
-            chmod 600 $OPSMANAGER_KEY
-            export OPSMANAGER_KEYPATH=$PWD/$OPSMANAGER_KEY
-            pushd platform-monitoring/kpi_monitoring
-              ./trigger-event-metrics.sh
-            popd
-
-            pushd loggregator/src/tools/logspinner
-              cf api  $CF_API --skip-ssl-validation
-              cf login -u $CF_USERNAME -p $CF_PASSWORD -o system -s system
+            cd loggregator/src/tools/logspinner
               cf push logspinner
               cf scale -i 50 logspinner
               cf bind-service logspinner prada-cups || true
               cf restage logspinner
-              for i in {1..500}
-              do
-                 curl -k https://logspinner.apps.prada.gcp.pcf-metrics.com/?delay=1ns\&cycles=10000000
-              done
-            popd
+                for i in {1..500}
+                do
+                   curl -k https://logspinner.apps.prada.gcp.pcf-metrics.com/?delay=1ns\&cycles=10000000
+                done
+            cd -
 
             pushd platform-monitoring/kpi_monitoring
-              ./run_slow_consumer.sh
-              ./run_slow_netcat.sh
               set +e
               ./runValidator.sh
               export exitStatus=`echo $?`
-              cf unbind-service logspinner prada-cups
-              cf delete-service prada-cups -f
-              cf delete logspinner -r -f
-              ./run_kill_netcat.sh
-              exit $exitStatus
             popd
+
+            cf unbind-service logspinner prada-cups
+            cf delete-service prada-cups -f
+            cf delete logspinner -r -f
+            exit $exitStatus
 
