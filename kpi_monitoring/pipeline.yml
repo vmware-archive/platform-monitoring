@@ -62,10 +62,10 @@ jobs:
 
             cf api  $CF_API --skip-ssl-validation
             cf login -u $CF_USERNAME -p $CF_PASSWORD -o system -s system
-            cf delete logspinner -r -f
+            cf delete logspinner -r -f || true
             cf create-user-provided-service prada-cups -l syslog://pcf.prada.gcp.pcf-metrics.com:12345 || true
             cf create-quota QUOTA -m 50GB -i -1 || true
-            cf push test-app -p platform-monitoring/kpi_monitoring/assets/test-app.jar -m 50GB
+            cf push test-app -p platform-monitoring/kpi_monitoring/assets/test-app.jar -m 50GB || true
             cf delete test-app -f
             cf delete-orphaned-routes -f
 
