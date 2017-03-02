@@ -2,7 +2,7 @@
 env_params: &env_params
   CF_USERNAME: {{kpi-validator-cf-username}}
   CF_PASSWORD: {{kpi-validator-cf-password}}
-  CF_API: {{kpi-validator-cf-api}}
+  DOMAIN: {{kpi-validator-domain}}
   PROVIDER_IP: {{kpi-validator-provider-ip}}
   PROVIDER_USERNAME: {{kpi-validator-provider-username}}
   PROVIDER_PASSWORD: {{kpi-validator-provider-password}}
@@ -30,7 +30,16 @@ resources:
     branch: master
     private_key: {{metrix-git-key}}
     tag_filter: v77
-
+- name: slack-alert-missing-kpis
+  type: slack-notification
+  source:
+    url: https://hooks.slack.com/services/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
+resource_types:
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
 jobs:
 - name: validate-kpis
   plan:
@@ -47,6 +56,10 @@ jobs:
       - name: loggregator
       - name: deployments-metrics
 
+      outputs:
+      - name: results
+        path: ""
+
       params:
         <<: *env_params
 
@@ -60,10 +73,10 @@ jobs:
             chmod 600 $OPSMANAGER_KEY
             export OPSMANAGER_KEYPATH=$PWD/$OPSMANAGER_KEY
 
-            cf api  $CF_API --skip-ssl-validation
+            cf api  https://api.sys.$DOMAIN --skip-ssl-validation
             cf login -u $CF_USERNAME -p $CF_PASSWORD -o system -s system
             cf delete logspinner -r -f || true
-            cf create-user-provided-service prada-cups -l syslog://pcf.prada.gcp.pcf-metrics.com:12345 || true
+            cf create-user-provided-service kpi-cups -l syslog://pcf.$DOMAIN:12345 || true
             cf create-quota QUOTA -m 50GB -i -1 || true
             cf push test-app -p platform-monitoring/kpi_monitoring/assets/test-app.jar -m 50GB || true
             cf delete test-app -f
@@ -72,11 +85,11 @@ jobs:
             cd loggregator/src/tools/logspinner
               cf push logspinner
               cf scale -i 50 logspinner
-              cf bind-service logspinner prada-cups || true
+              cf bind-service logspinner kpi-cups || true
               cf restage logspinner
                 for i in {1..500}
                 do
-                   curl -k https://logspinner.apps.prada.gcp.pcf-metrics.com/?delay=1ns\&cycles=10000000
+                   curl -k https://logspinner.apps.$DOMAIN/?delay=1ns\&cycles=10000000
                 done
             cd -
 
@@ -86,8 +99,17 @@ jobs:
               export exitStatus=`echo $?`
             popd
 
-            cf unbind-service logspinner prada-cups
-            cf delete-service prada-cups -f
+            mv platform-monitoring/kpi_monitoring/missing_kpis results
+
+            cf unbind-service logspinner kpi-cups
+            cf delete-service kpi-cups -f
             cf delete logspinner -r -f
             exit $exitStatus
 
+    on_failure:
+      put: slack-alert-missing-kpis
+      inputs:
+      - name: results
+      params:
+        text: There are missing KPIs! ${ cat results/missing_kpis )
+        username: KPI Bot

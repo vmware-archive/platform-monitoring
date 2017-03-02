@@ -5,6 +5,7 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -65,11 +66,18 @@ public class Validator {
         System.out.println("*********************************DONE RECEIVED METRICS***************************");
 
         boolean missingKpis = false;
-        for(String metric : kpis){
-            if(!metric.isEmpty() && !receivedMetrics.contains(metric)) {
-                missingKpis = true;
-                System.out.println("MISSING KPI: "+metric);
+        try{
+            PrintWriter writer = new PrintWriter("missing_kpis", "UTF-8");
+            for(String metric : kpis){
+                if(!metric.isEmpty() && !receivedMetrics.contains(metric)) {
+                    missingKpis = true;
+                    System.out.println("MISSING KPI: "+metric);
+                    writer.println("MISSING KPI: "+metric);
+                }
             }
+            writer.close();
+        } catch (IOException e) {
+           e.printStackTrace();
         }
         if(missingKpis){
             System.out.println("THERE ARE MISSING KPIS!");
