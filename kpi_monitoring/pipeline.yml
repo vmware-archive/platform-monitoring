@@ -85,6 +85,13 @@ jobs:
             #cf push test-app -p platform-monitoring/kpi_monitoring/assets/test-app.jar -m 50GB || true
             #cf delete test-app -f
 
+            cf push 500-error -p platform-monitoring/kpi_monitoring/assets/500-error.jar
+            cf push bad-gateway -p platform-monitoring/kpi_monitoring/assets/bad-gateway.jar
+            curl http://500-error.apps.$DOMAIN/greeting
+            curl http://bad-gateway.apps.$DOMAIN/greeting
+            cf delete 500-error
+            cf delete bad-gateway
+
             cf delete-orphaned-routes -f
 
             cd loggregator/src/tools/logspinner
@@ -102,7 +109,7 @@ jobs:
             popd
 
             mv platform-monitoring/kpi_monitoring/missing_kpis results
-            #bosh -n --ca-cert /var/tempest/workspaces/default/root_ca_certificate target 10.0.0.5
+            #BOSH DEPLOYMENT COMMANDS, NOT OM
             #bosh -n --ca-cert /var/tempest/workspaces/default/root_ca_certificate target 10.0.0.5
             #bosh cleanup --all
             #bosh releases | grep 'cf ' | awk '{ print $4 }' | sed 's/\*//g' > results/cf_version
