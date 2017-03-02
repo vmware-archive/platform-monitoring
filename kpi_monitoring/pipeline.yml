@@ -86,11 +86,10 @@ jobs:
             #cf delete test-app -f
 
             cf push 500-error -p platform-monitoring/kpi_monitoring/assets/500-error.jar
-            cf push bad-gateway -p platform-monitoring/kpi_monitoring/assets/bad-gateway.jar
-            curl http://500-error.apps.$DOMAIN/greeting
-            curl http://bad-gateway.apps.$DOMAIN/greeting
-            cf delete 500-error
-            cf delete bad-gateway
+            cf push bad-gateway -p platform-monitoring/kpi_monitoring/assets/bad-gateway.jar -u none
+
+            siege -t 3s http://500-error.apps.$DOMAIN/greeting
+            siege -t 3s http://bad-gateway.apps.$DOMAIN
 
             cf delete-orphaned-routes -f
 
@@ -124,6 +123,8 @@ jobs:
             cf unbind-service logspinner kpi-cups
             cf delete-service kpi-cups -f
             cf delete logspinner -r -f
+            cf delete 500-error -r -f
+            cf delete bad-gateway -r -f
             exit $exitStatus
 
     on_failure:
