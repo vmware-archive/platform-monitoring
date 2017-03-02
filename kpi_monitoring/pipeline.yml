@@ -8,6 +8,7 @@ env_params: &env_params
   PROVIDER_PASSWORD: {{kpi-validator-provider-password}}
   OPSMANAGER_URL: {{kpi-validator-opsmanager-url}}
   OPSMANAGER_USERNAME: {{kpi-validator-opsmanager-username}}
+  OPSMANAGER_LOGIN_PASSWORD: {{kpi-validator-opsmanager-login-password}}
   OPSMANAGER_KEY: {{kpi-validator-opsmanager-key}}
   RUN_TIME_MINUTES: {{kpi-validator-run-time-minutes}}
 
@@ -78,9 +79,12 @@ jobs:
             cf login -u $CF_USERNAME -p $CF_PASSWORD -o system -s system
             cf delete logspinner -r -f || true
             cf create-user-provided-service kpi-cups -l syslog://pcf.$DOMAIN:12345 || true
-            cf create-quota QUOTA -m 50GB -i -1 || true
-            cf push test-app -p platform-monitoring/kpi_monitoring/assets/test-app.jar -m 50GB || true
-            cf delete test-app -f
+
+            #Commenting out because failedStagingRequests is no longer a metric
+            #cf create-quota QUOTA -m 50GB -i -1 || true
+            #cf push test-app -p platform-monitoring/kpi_monitoring/assets/test-app.jar -m 50GB || true
+            #cf delete test-app -f
+
             cf delete-orphaned-routes -f
 
             cd loggregator/src/tools/logspinner
@@ -88,10 +92,7 @@ jobs:
               cf scale -i 50 logspinner
               cf bind-service logspinner kpi-cups || true
               cf restage logspinner
-                for i in {1..500}
-                do
-                   curl -k https://logspinner.apps.$DOMAIN/?delay=1ns\&cycles=10000000
-                done
+              siege -c 50 -t 10s https://logspinner.apps.$DOMAIN/?delay=1ns\&cycles=10000000
             cd -
 
             pushd platform-monitoring/kpi_monitoring
@@ -101,6 +102,17 @@ jobs:
             popd
 
             mv platform-monitoring/kpi_monitoring/missing_kpis results
+            #bosh -n --ca-cert /var/tempest/workspaces/default/root_ca_certificate target 10.0.0.5
+            #bosh -n --ca-cert /var/tempest/workspaces/default/root_ca_certificate target 10.0.0.5
+            #bosh cleanup --all
+            #bosh releases | grep 'cf ' | awk '{ print $4 }' | sed 's/\*//g' > results/cf_version
+            gem install cf-uaac
+            uaac target https://pcf.$DOMAIN/uaa --skip-ssl-validation
+            uaac token owner get opsman admin -s "" -p $OPSMANAGER_LOGIN_PASSWORD
+            UAA_ACCESS_TOKEN=`uaac context | grep access_token | sed 's/      access_token: //g'`
+            curl -v -k https://pcf.$DOMAIN/api/v0/available_products \
+            -X GET \
+            -H "Authorization: Bearer $UAA_ACCESS_TOKEN"| jq .[0].product_version | sed 's/\"//g' > results/cf_version
 
             cf unbind-service logspinner kpi-cups
             cf delete-service kpi-cups -f
@@ -112,5 +124,5 @@ jobs:
       inputs:
       - name: results
       params:
-        text: There are missing KPIs! ${ cat results/missing_kpis )
+        text: "There are missing KPIs in CF $( cat results/cf_version )! \n $( cat results/missing_kpis )"
         username: KPI Bot
