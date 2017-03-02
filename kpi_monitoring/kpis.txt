@@ -4,7 +4,7 @@ DopplerServer.TruncatingBuffer.totalDroppedMessages
 system.healthy
 system.mem.percent
 system.disk.system.percent
-system.disk.ephermal.percent
+system.disk.ephemeral.percent
 system.disk.persistent.percent
 system.cpu.user
 system.load.1m
