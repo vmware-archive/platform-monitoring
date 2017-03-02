@@ -9,6 +9,7 @@ env_params: &env_params
   OPSMANAGER_URL: {{kpi-validator-opsmanager-url}}
   OPSMANAGER_USERNAME: {{kpi-validator-opsmanager-username}}
   OPSMANAGER_KEY: {{kpi-validator-opsmanager-key}}
+  RUN_TIME_MINUTES: {{kpi-validator-run-time-minutes}}
 
 resources:
 - name: platform-monitoring
