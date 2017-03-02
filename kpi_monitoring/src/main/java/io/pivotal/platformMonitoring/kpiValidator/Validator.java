@@ -40,7 +40,7 @@ public class Validator {
         Set<String> receivedMetrics = new HashSet<>();
         Set<String> fullMetrics = new HashSet<>();
         MBeanServerConnection mbeanConn = jmxConnector.getMBeanServerConnection();
-        String queryName = String.format("*:deployment=%1s,job=*,index=*,ip=*,*", CF_DEPLOYMENT_NAME);
+        String queryName = String.format("*:deployment=%1s*,job=*,index=*,ip=*,*", CF_DEPLOYMENT_NAME);
         System.out.println("Started Capturing Metrics: "+Calendar.getInstance().getTime());
         for(int i = 0; i < RUN_TIME*60/POLL_INTERVAL; i++){
             Set<ObjectName> names = mbeanConn.queryNames(new ObjectName(queryName), null);
