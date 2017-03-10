@@ -34,6 +34,6 @@ gorouter.ms_since_last_registry_update
 gorouter.bad_gateways
 gorouter.responses.5xx
 gorouter.total_routes
-vitals.num_cores
-vitals.cpu_load_avg
+cc.vitals.num_cores
+cc.vitals.cpu_load_avg
 cc.vitals.mem_free_bytes
