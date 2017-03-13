@@ -4,4 +4,5 @@ kpi_monitoring/target
 dashboard/build
 dashboard/.gradle
 kpi_monitoring/.gradle
+kpi_monitoring/build
 .gradle
