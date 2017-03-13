@@ -18,15 +18,13 @@ public class MetricsService {
     @Autowired
     private Map<String, Double> store;
 
-    @Scheduled(fixedDelayString = "${jmx.interval}") // Make me use jmxInterval again
+    @Scheduled(fixedDelayString = "${jmx.interval}")
     public void run() throws Exception {
         System.out.println("Grabbing metrics!");
 
         try {
-            System.out.println("start");
             jmxService.getMetrics()
                 .forEach((k, v) -> store.put(k, Double.parseDouble(v)));
-            System.out.println("end");
 
             store.put(Metric.CALCULATED_METRIC_FIREHOSE_LOSS_RATE, calculatorService.calculateFirehoseLossRate(store));
         } catch(Exception e) {

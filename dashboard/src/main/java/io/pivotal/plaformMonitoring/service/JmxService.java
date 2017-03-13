@@ -67,14 +67,6 @@ public class JmxService {
                 }
             });
 
-//        for(ObjectName name : names) {
-//            System.out.println("LOOPING NAME");
-//            for(MBeanAttributeInfo attr : mbeanConn.getMBeanInfo(name).getAttributes()) {
-//                System.out.println("LOOPING ATTRIBUTE");
-//                metrics.put(attr.getName().replaceAll(OPENTSDB_PREFIX, ""), mbeanConn.getAttribute(name, attr.getName()).toString());
-//            }
-//        }
-
         return metrics;
     }
 
