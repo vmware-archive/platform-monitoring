@@ -2,22 +2,20 @@ package io.pivotal.plaformMonitoring.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
-/**
- * Created by pivotal on 2/17/17.
- */
 public class DataPoint {
     private final String name;
     private final Double value;
     private final Long timestamp;
     private final Map<String, String> tags;
 
-    public DataPoint(String deployment, String job, String index, String ip, String name, double value, long timestamp) {
-        Map<String, String> tags = new HashMap<String, String>();
-        tags.put("deployment", deployment);
-        tags.put("job", job);
-        tags.put("index", index);
-        tags.put("ip", ip);
+    public DataPoint(String name, double value, long timestamp) {
+        Map<String, String> tags = new HashMap<>();
+        tags.put("deployment", UUID.randomUUID().toString());
+        tags.put("job", "some-job");
+        tags.put("index", "some-index");
+        tags.put("ip", "0.0.0.0");
 
         this.name = name;
         this.value = value;
@@ -25,23 +23,55 @@ public class DataPoint {
         this.tags = tags;
     }
 
-    public String getMetricName() {
+    public String getName() {
         return name;
-    }
-
-    public Long getTimestamp() {
-        return timestamp;
     }
 
     public Double getValue() {
         return value;
     }
 
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
     public Map<String, String> getTags() {
         return tags;
     }
 
-    public String getTag(String tagName) {
-        return tags.get(tagName);
+    public String getTag(String tag) {
+        return tags.getOrDefault(tag, "");
+    }
+
+    @Override
+    public String toString() {
+        return "DataPoint{" +
+            "name='" + name + '\'' +
+            ", value=" + value +
+            ", timestamp=" + timestamp +
+            ", tags=" + tags +
+            '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+
+        DataPoint dataPoint = (DataPoint) o;
+
+        if(name != null ? !name.equals(dataPoint.name) : dataPoint.name != null) return false;
+        if(value != null ? !value.equals(dataPoint.value) : dataPoint.value != null) return false;
+        if(timestamp != null ? !timestamp.equals(dataPoint.timestamp) : dataPoint.timestamp != null) return false;
+        return tags != null ? tags.equals(dataPoint.tags) : dataPoint.tags == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
+        result = 31 * result + (tags != null ? tags.hashCode() : 0);
+        return result;
     }
 }

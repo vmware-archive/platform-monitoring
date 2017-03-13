@@ -1,0 +1,7 @@
+jmx:
+  interval: ${JMX_INTERVAL}
+  serviceURL: ${JMX_SERVICE_URL}
+  username: ${JMX_USERNAME}
+  password: ${JMX_PASSWORD}
+calculation:
+  interval: ${CALCULATION_INTERVAL}

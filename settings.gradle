@@ -1,0 +1,4 @@
+rootProject.name = 'platform'
+
+include 'dashboard'
+include 'kpi_monitoring'

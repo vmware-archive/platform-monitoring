@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-mvn clean
-mvn package
-
+gradle clean
+gradle build
 
 java -DHOSTNAME=$PROVIDER_IP \
      -DUSERNAME=$PROVIDER_USERNAME \
@@ -10,4 +9,4 @@ java -DHOSTNAME=$PROVIDER_IP \
      -DNOZZLE_PREFIX=opentsdb.nozzle. \
      -DRUN_TIME_MINUTES=$RUN_TIME_MINUTES \
      -DPOLL_INTERVAL_SECONDS=5 \
-    -jar target/platform-monitoring-validator-1.1-jar-with-dependencies.jar
+     -jar build/libs/platform-monitoring-validator-1.1-jar-with-dependencies.jar

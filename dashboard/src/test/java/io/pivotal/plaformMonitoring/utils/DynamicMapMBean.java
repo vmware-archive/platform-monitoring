@@ -2,13 +2,14 @@ package io.pivotal.plaformMonitoring.utils;
 
 import javax.management.*;
 import javax.management.modelmbean.DescriptorSupport;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DynamicMapMBean implements DynamicMBean {
+import static java.util.stream.Collectors.toList;
 
+public class DynamicMapMBean implements DynamicMBean {
     private String className;
     private Map<String, Double> values;
     private String description;
@@ -34,11 +35,9 @@ public class DynamicMapMBean implements DynamicMBean {
     }
 
     public AttributeList getAttributes(String[] attributes) {
-        List<Attribute> list = new ArrayList<>();
-        for (String s : attributes) {
-            list.add(new Attribute(s, values.get(s)));
-        }
-        return new AttributeList(list);
+        return new AttributeList(Arrays.stream(attributes)
+            .map(s -> new Attribute(s, values.get(s)))
+            .collect(toList()));
     }
 
     public AttributeList setAttributes(AttributeList attributes) {
@@ -54,40 +53,22 @@ public class DynamicMapMBean implements DynamicMBean {
     }
 
     private void buildMBeanInfo() {
-        List<MBeanAttributeInfo> attrs = new ArrayList<>();
-        List<MBeanOperationInfo> ops = new ArrayList<>();
-
         Descriptor descriptor = new DescriptorSupport();
 
-        for (String name : values.keySet()) {
-            Number val = values.get(name);
-            descriptor.setField(name, val);
+        List<MBeanAttributeInfo> attrs = values.keySet().stream()
+            .map(name -> new MBeanAttributeInfo(name, "java.lang.Double", name, true, false, false))
+            .collect(toList());
 
-            attrs.add(new MBeanAttributeInfo(name, "java.lang.Double", name, true, false, false));
-            ops.add(new MBeanOperationInfo(name, name, null, "java.lang.Double", MBeanOperationInfo.INFO));
-        }
+        List<MBeanOperationInfo> ops = values.keySet().stream()
+            .map(name -> new MBeanOperationInfo(name, name, null, "java.lang.Double", MBeanOperationInfo.INFO))
+            .collect(toList());
 
+        values.forEach(descriptor::setField);
+        tags.forEach(descriptor::setField);
 
-        for (String name : tags.keySet()) {
-            String val = tags.get(name);
-            descriptor.setField(name, val);
-        }
+        MBeanAttributeInfo[] attrsArray = attrs.toArray(new MBeanAttributeInfo[attrs.size()]);
+        MBeanOperationInfo[] opsArray = ops.toArray(new MBeanOperationInfo[ops.size()]);
 
-        MBeanAttributeInfo[] attrsArray = new MBeanAttributeInfo[attrs.size()];
-        for (int i = 0; i < attrs.size(); ++i) {
-            attrsArray[i] = attrs.get(i);
-        }
-
-        MBeanOperationInfo[] opsArray = new MBeanOperationInfo[ops.size()];
-        for (int i = 0; i < ops.size(); ++i) {
-            opsArray[i] = ops.get(i);
-        }
-
-        mbi = new MBeanInfo(className, description,
-                attrsArray,
-                null,
-                opsArray,
-                null,
-                descriptor);
+        mbi = new MBeanInfo(className, description, attrsArray, null, opsArray, null, descriptor);
     }
 }

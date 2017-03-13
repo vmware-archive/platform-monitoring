@@ -1,54 +1,34 @@
 package io.pivotal.plaformMonitoring.service;
 
-import io.pivotal.plaformMonitoring.configuration.Configuration;
+import io.pivotal.plaformMonitoring.model.Metric;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.Map;
 
-/**
- * Created by pivotal on 2/16/17.
- */
 @Service
-public class MetricsService implements CommandLineRunner {
+public class MetricsService {
+    @Autowired
+    private JmxService jmxService;
 
     @Autowired
-    private JMXService jmxService;
-    private Configuration configuration;
-    private boolean run = true;
+    private CalculatorService calculatorService;
 
-    public MetricsService(JMXService jmxService, Configuration configuration) {
-        this.jmxService = jmxService;
-        this.configuration = configuration;
-    }
+    @Autowired
+    private Map<String, Double> store;
 
-    public void getMetrics() throws Exception {
-        System.out.println("Retrieving Metrics...");
-        Set<String> metrics = jmxService.getMetrics(configuration);
-        for (String metric : metrics) {
-            System.out.println(metric);
+    @Scheduled(fixedDelayString = "${jmx.interval}") // Make me use jmxInterval again
+    public void run() throws Exception {
+        System.out.println("Grabbing metrics!");
+
+        try {
+            jmxService.getMetrics()
+                .forEach((k, v) -> store.put(k, Double.parseDouble(v)));
+
+            store.put(Metric.CALCULATED_METRIC_FIREHOSE_LOSS_RATE, calculatorService.calculateFirehoseLossRate(store));
+        } catch(Exception e) {
+            e.printStackTrace();
         }
-        System.out.println("Done Retrieving Metrics.");
-    }
-
-    @Override
-    public void run(String... args) throws Exception {
-        // run a loop, every x seconds
-        // get metrics from jmx bridge
-        // print metrics to the console
-        while (run) {
-            try {
-                getMetrics();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Thread.sleep(configuration.getJmxInterval());
-        }
-    }
-
-    public void stop() {
-        run = false;
-        System.out.println("stopping");
     }
 }
