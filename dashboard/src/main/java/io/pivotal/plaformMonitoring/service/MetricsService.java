@@ -23,8 +23,10 @@ public class MetricsService {
         System.out.println("Grabbing metrics!");
 
         try {
+            System.out.println("start");
             jmxService.getMetrics()
                 .forEach((k, v) -> store.put(k, Double.parseDouble(v)));
+            System.out.println("end");
 
             store.put(Metric.CALCULATED_METRIC_FIREHOSE_LOSS_RATE, calculatorService.calculateFirehoseLossRate(store));
         } catch(Exception e) {

@@ -14,7 +14,7 @@ public class DataPoint {
         Map<String, String> tags = new HashMap<>();
         tags.put("deployment", UUID.randomUUID().toString());
         tags.put("job", "some-job");
-        tags.put("index", "some-index");
+        tags.put("index", UUID.randomUUID().toString());
         tags.put("ip", "0.0.0.0");
 
         this.name = name;
@@ -37,10 +37,6 @@ public class DataPoint {
 
     public Map<String, String> getTags() {
         return tags;
-    }
-
-    public String getTag(String tag) {
-        return tags.getOrDefault(tag, "");
     }
 
     @Override

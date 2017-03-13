@@ -1,4 +1,4 @@
-package io.pivotal.plaformMonitoring.data;
+package io.pivotal.plaformMonitoring.unit;
 
 import io.pivotal.plaformMonitoring.model.Metric;
 import io.pivotal.plaformMonitoring.service.JmxService;
@@ -32,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 @RunWith(SpringRunner.class)
 public class JmxServiceTest {
     private static final String jmxServiceUrl = "service:jmx:rmi://localhost:44445/jndi/rmi://localhost:44444/jmxrmi";
+    private static final JMXNamingService jmxNamingService = new JMXNamingService();
     private static JMXConnectorServer jmxConnectorServer;
 
     private static JmxService jmxService;
@@ -81,6 +82,29 @@ public class JmxServiceTest {
     }
 
     @Test
+    public void itRemovesThePrefix() throws Exception {
+        DataPoint opentsdbNozzleDatapoint = dataPointBuilder()
+            .name("opentsdb.nozzle.foo.bar")
+            .timestamp(System.currentTimeMillis())
+            .value(1.0d)
+            .build();
+
+        DataPoint normalDatapoint = dataPointBuilder()
+            .name("hello.world")
+            .timestamp(System.currentTimeMillis())
+            .value(1.0d)
+            .build();
+
+        addDataPoint(opentsdbNozzleDatapoint, jmxConnectorServer.getMBeanServer());
+        addDataPoint(normalDatapoint, jmxConnectorServer.getMBeanServer());
+
+        Map<String, String> receivedMetrics = jmxService.getMetrics();
+        assertThat(receivedMetrics.keySet()).doesNotContain("opentsdb.nozzle.foo.bar");
+        assertThat(receivedMetrics.keySet()).contains("foo.bar");
+        assertThat(receivedMetrics.keySet()).contains("hello.world");
+    }
+
+    @Test
     public void itReusesConnections() throws Exception {
         Map<String, String> receivedMetrics = jmxService.getMetrics();
         assertThat(receivedMetrics.keySet().contains(Metric.SHED_ENVELOPES));
@@ -106,11 +130,11 @@ public class JmxServiceTest {
     }
 
 
-    private void addDataPoint(DataPoint dataPoint, MBeanServer server) throws Exception {
-        DynamicMBean mBean = new DynamicMapMBean(dataPoint, new JMXNamingService());
-        ObjectName mBeanName = new JMXNamingService().getJmxName(dataPoint);
+    private static void addDataPoint(DataPoint dataPoint, MBeanServer server) throws Exception {
+        DynamicMBean mBean = new DynamicMapMBean(dataPoint, jmxNamingService);
+        ObjectName mBeanName = jmxNamingService.getJmxName(dataPoint);
         server.registerMBean(mBean, mBeanName);
-        mBean.setAttribute(new Attribute(new JMXNamingService().getName(dataPoint), dataPoint.getValue()));
+        mBean.setAttribute(new Attribute(jmxNamingService.getName(dataPoint), dataPoint.getValue()));
     }
 
     static class SimpleJMXAuthenticator implements JMXAuthenticator {

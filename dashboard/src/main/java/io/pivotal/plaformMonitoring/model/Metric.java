@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Metric {
-    public final static String NOT_FOUND = "Not found";
     public final static String TOTAL_DROPPED_MESSAGES = "DopplerServer.TruncatingBuffer.totalDroppedMessages";
     public final static String SHED_ENVELOPES = "DopplerServer.doppler.shedEnvelopes";
     public final static String RECEIVED_ENVELOPES = "DopplerServer.listeners.receivedEnvelopes";

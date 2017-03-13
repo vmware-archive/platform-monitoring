@@ -17,7 +17,8 @@ public class JMXNamingService {
     }
 
     public ObjectName getJmxName(DataPoint dataPoint) throws MalformedObjectNameException {
-        final String s = String.format(JMX_NAME_TEMPLATE, dataPoint.getTag("deployment"), dataPoint.getTag("job"), dataPoint.getTag("index"), dataPoint.getTag("ip"));
+        Map<String, String> tags = dataPoint.getTags();
+        final String s = String.format(JMX_NAME_TEMPLATE, tags.get("deployment"), tags.get("job"), tags.get("index"), tags.get("ip"));
         return new ObjectName(s);
     }
 
