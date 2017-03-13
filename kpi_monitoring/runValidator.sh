@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-gradle clean
-gradle build
+./gradlew clean
+./gradlew build
 
 java -DHOSTNAME=$PROVIDER_IP \
      -DUSERNAME=$PROVIDER_USERNAME \
