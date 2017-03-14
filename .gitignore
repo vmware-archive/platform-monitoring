@@ -6,3 +6,4 @@ dashboard/.gradle
 kpi_monitoring/.gradle
 kpi_monitoring/build
 .gradle
+*.iml
