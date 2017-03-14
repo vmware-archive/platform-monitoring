@@ -1,0 +1,22 @@
+apply plugin: 'java'
+
+jar {
+    baseName = 'PlatformMonitoring'
+    version = '0.0.1-SNAPSHOT'
+    manifest {
+        attributes 'Main-Class': 'io.pivotal.plaformMonitoring.PlatformMonitoringApplication'
+    }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile(
+        'org.springframework.boot:spring-boot-starter-web:1.5.2.RELEASE',
+    )
+}

@@ -1,0 +1,7 @@
+jmx:
+  interval: 200
+  serviceURL: service:jmx:rmi://localhost:44445/jndi/rmi://localhost:44444/jmxrmi
+  username: admin
+  password: password
+calculation:
+  interval: 200
