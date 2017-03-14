@@ -1,8 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 
 */build
-dashboard/.gradle
-kpi_monitoring/.gradle
-kpi_monitoring/build
+*/.gradle
 .gradle
+build
 *.iml

@@ -29,6 +29,7 @@ repositories {
 dependencies {
     compile(
         'org.springframework.boot:spring-boot-starter-web:1.5.2.RELEASE',
+        'org.springframework.boot:spring-boot-devtools:1.5.2.RELEASE', // hot swapping
 
         project(':dashboard_api'),
         project(':dashboard_ui'),
