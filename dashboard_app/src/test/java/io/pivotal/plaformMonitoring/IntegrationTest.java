@@ -1,9 +1,14 @@
-package io.pivotal.plaformMonitoring.integration;
+package io.pivotal.plaformMonitoring;
 
-import io.pivotal.plaformMonitoring.model.Metric;
+import io.pivotal.api.MetricsController;
+import io.pivotal.api.model.Metric;
+import io.pivotal.api.service.CalculatorService;
+import io.pivotal.api.service.JmxService;
+import io.pivotal.api.service.MetricsService;
 import io.pivotal.plaformMonitoring.utils.DataPoint;
 import io.pivotal.plaformMonitoring.utils.DynamicMapMBean;
 import io.pivotal.plaformMonitoring.utils.JMXNamingService;
+import io.pivotal.ui.HomeController;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -11,7 +16,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.management.Attribute;
@@ -25,10 +30,8 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static io.pivotal.plaformMonitoring.utils.DataPointBuilder.dataPointBuilder;
 import static java.util.Collections.emptyMap;
@@ -49,7 +52,7 @@ public class IntegrationTest {
     public static void initialSetup() throws IOException {
         try {
             LocateRegistry.createRegistry(44444);
-        } catch(RemoteException e) {
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
 

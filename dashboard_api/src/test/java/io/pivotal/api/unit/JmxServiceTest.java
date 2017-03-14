@@ -1,10 +1,10 @@
-package io.pivotal.plaformMonitoring.unit;
+package io.pivotal.api.unit;
 
-import io.pivotal.plaformMonitoring.model.Metric;
-import io.pivotal.plaformMonitoring.service.JmxService;
-import io.pivotal.plaformMonitoring.utils.DataPoint;
-import io.pivotal.plaformMonitoring.utils.DynamicMapMBean;
-import io.pivotal.plaformMonitoring.utils.JMXNamingService;
+import io.pivotal.api.model.Metric;
+import io.pivotal.api.service.JmxService;
+import io.pivotal.api.utils.DataPoint;
+import io.pivotal.api.utils.DynamicMapMBean;
+import io.pivotal.api.utils.JMXNamingService;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -25,7 +25,7 @@ import java.rmi.registry.LocateRegistry;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.pivotal.plaformMonitoring.utils.DataPointBuilder.dataPointBuilder;
+import static io.pivotal.api.utils.DataPointBuilder.dataPointBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 

@@ -1,6 +1,6 @@
-package io.pivotal.plaformMonitoring.service;
+package io.pivotal.api.service;
 
-import io.pivotal.plaformMonitoring.model.Metric;
+import io.pivotal.api.model.Metric;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

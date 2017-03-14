@@ -1,4 +1,4 @@
-package io.pivotal.plaformMonitoring.utils;
+package io.pivotal.api.utils;
 
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;

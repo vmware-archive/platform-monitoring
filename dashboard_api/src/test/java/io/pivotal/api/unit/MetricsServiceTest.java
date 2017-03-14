@@ -1,9 +1,9 @@
-package io.pivotal.plaformMonitoring.unit;
+package io.pivotal.api.unit;
 
-import io.pivotal.plaformMonitoring.model.Metric;
-import io.pivotal.plaformMonitoring.service.CalculatorService;
-import io.pivotal.plaformMonitoring.service.JmxService;
-import io.pivotal.plaformMonitoring.service.MetricsService;
+import io.pivotal.api.model.Metric;
+import io.pivotal.api.service.CalculatorService;
+import io.pivotal.api.service.JmxService;
+import io.pivotal.api.service.MetricsService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

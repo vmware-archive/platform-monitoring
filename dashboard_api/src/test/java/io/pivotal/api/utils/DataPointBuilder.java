@@ -1,4 +1,4 @@
-package io.pivotal.plaformMonitoring.utils;
+package io.pivotal.api.utils;
 
 public class DataPointBuilder {
     private String name;
