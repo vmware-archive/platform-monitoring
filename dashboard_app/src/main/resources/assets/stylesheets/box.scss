@@ -1,0 +1,58 @@
+.boxes {
+
+}
+
+.boxes-row {
+  display: flex;
+
+  .box:not(:last-child) {
+    margin-right: 1px;
+  }
+}
+
+.box {
+  flex: 1;
+  color: white;
+  margin-bottom: 1px;
+  padding: $base-unit / 4;
+  cursor: pointer;
+
+  &.box--good {
+    background-color: $green-3;
+  }
+
+  &.box--medium {
+    background-color: $yellow-3;
+  }
+
+  &.box--bad {
+    background-color: $red-3;
+  }
+
+  &.box--neutral {
+    background-color: $gray-3;
+  }
+}
+
+.box-header {
+  font-size: $font-size-extra-small;
+  display: flex;
+  font-weight: bold;
+  padding: 0 $base-unit / 2;
+
+  .left {
+    flex: 1;
+    text-align: left;
+  }
+
+  .right {
+    text-align: right;
+  }
+}
+
+.box-body {
+  font-size: $font-size-extra-large;
+  line-height: $font-size-extra-large * 2.5;
+  font-weight: bold;
+  text-align: center;
+}

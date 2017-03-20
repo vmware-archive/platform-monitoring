@@ -1,6 +1,5 @@
 rootProject.name = 'platform'
 
 include 'dashboard_api'
-include 'dashboard_ui'
 include 'dashboard_app'
 include 'kpi_monitoring'

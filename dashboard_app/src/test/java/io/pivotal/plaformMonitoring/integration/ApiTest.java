@@ -1,14 +1,9 @@
-package io.pivotal.plaformMonitoring;
+package io.pivotal.plaformMonitoring.integration;
 
-import io.pivotal.api.MetricsController;
 import io.pivotal.api.model.Metric;
-import io.pivotal.api.service.CalculatorService;
-import io.pivotal.api.service.JmxService;
-import io.pivotal.api.service.MetricsService;
 import io.pivotal.plaformMonitoring.utils.DataPoint;
 import io.pivotal.plaformMonitoring.utils.DynamicMapMBean;
 import io.pivotal.plaformMonitoring.utils.JMXNamingService;
-import io.pivotal.ui.HomeController;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,7 +11,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.management.Attribute;
@@ -42,7 +36,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-public class IntegrationTest {
+public class ApiTest {
     private static JMXConnectorServer jmxConnectorServer;
 
     @Autowired

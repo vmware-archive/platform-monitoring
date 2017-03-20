@@ -5,9 +5,8 @@ jmx:
   password: ${JMX_PASSWORD}
 calculation:
   interval: ${CALCULATION_INTERVAL}
-#spring:
-#  thymeleaf:
-#    cache: false
-#  devtools:
-#    restart:
-#      exclude:
+spring:
+  level:
+    root: INFO
+  thymeleaf:
+    cache: false

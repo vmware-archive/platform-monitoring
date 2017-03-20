@@ -1,4 +1,4 @@
-package io.pivotal.ui;
+package io.pivotal.plaformMonitoring;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

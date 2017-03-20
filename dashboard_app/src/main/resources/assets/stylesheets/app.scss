@@ -1,0 +1,12 @@
+@import "../node_modules/pui-css-variables-and-mixins/mixins";
+@import "../node_modules/pui-css-variables-and-mixins/pui-variables";
+@import "../node_modules/pui-css-panels/panels.css";
+@import "../node_modules/pui-css-buttons/buttons.css";
+@import "../node_modules/pui-css-iconography/iconography.css";
+
+@import "./panel";
+
+.main-page {
+  display: flex;
+  align-items: flex-start;
+}

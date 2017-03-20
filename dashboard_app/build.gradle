@@ -30,18 +30,41 @@ dependencies {
     compile(
         'org.springframework.boot:spring-boot-starter-web:1.5.2.RELEASE',
         'org.springframework.boot:spring-boot-devtools:1.5.2.RELEASE', // hot swapping
+        'org.springframework.boot:spring-boot-starter-thymeleaf:1.5.2.RELEASE',
 
         project(':dashboard_api'),
-        project(':dashboard_ui'),
     )
 
     testCompile(
+        'junit:junit:4.12',
+
         'org.assertj:assertj-core:3.6.2',
+
         'org.springframework.boot:spring-boot-starter-test:1.5.2.RELEASE',
+
         'org.powermock:powermock-mockito-release-full:1.6.4',
-        'org.awaitility:awaitility:2.0.0'
+
+        'org.awaitility:awaitility:2.0.0',
+
+        'org.seleniumhq.selenium:selenium-chrome-driver:3.0.1',
+
+        'org.fluentlenium:fluentlenium-core:3.1.1',
+        'org.fluentlenium:fluentlenium-junit:3.1.1',
+        'org.fluentlenium:fluentlenium-assertj:3.1.1',
     )
 }
+
+task installJs(type: Exec) {
+    workingDir 'src/main/resources/assets'
+    commandLine 'npm', 'install'
+}
+
+task testJs(type: Exec, dependsOn: 'installJs') {
+    workingDir 'src/main/resources/assets'
+    commandLine 'npm', 'test'
+}
+
+test.dependsOn 'testJs'
 
 String ANSI_RESET = "\u001B[0m";
 String ANSI_RED = "\u001B[31m";
