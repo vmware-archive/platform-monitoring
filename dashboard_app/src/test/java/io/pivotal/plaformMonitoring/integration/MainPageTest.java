@@ -3,12 +3,16 @@ package io.pivotal.plaformMonitoring.integration;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public class MainPageTest extends UiTest {
     @Before
     public void setup() {
         goTo(getBaseUrl());
+        // wait for react to load into page
+        await().atMost(2000L).until($(".main-page")).present();
     }
 
     @Test

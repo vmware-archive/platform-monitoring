@@ -54,18 +54,6 @@ dependencies {
     )
 }
 
-task installJs(type: Exec) {
-    workingDir 'src/main/resources/assets'
-    commandLine 'npm', 'install'
-}
-
-task testJs(type: Exec, dependsOn: 'installJs') {
-    workingDir 'src/main/resources/assets'
-    commandLine 'npm', 'test'
-}
-
-test.dependsOn 'testJs'
-
 String ANSI_RESET = "\u001B[0m";
 String ANSI_RED = "\u001B[31m";
 String ANSI_GREEN = "\u001B[32m";
@@ -102,3 +90,16 @@ test {
         showStandardStreams verboseTests // switch me on with -D verboseTests
     }
 }
+
+task installJs(type: Exec) {
+    workingDir 'src/main/resources/assets'
+    commandLine 'npm', 'install'
+}
+
+task jsTest(type: Exec, dependsOn: 'installJs') {
+    workingDir 'src/main/resources/assets'
+    commandLine 'npm', 'test'
+}
+
+test.dependsOn installJs
+build.dependsOn jsTest

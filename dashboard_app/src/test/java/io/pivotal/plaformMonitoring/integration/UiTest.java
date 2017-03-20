@@ -3,6 +3,7 @@ package io.pivotal.plaformMonitoring.integration;
 import io.pivotal.plaformMonitoring.integration.config.BrowserConfig;
 import io.pivotal.plaformMonitoring.integration.config.BrowserType;
 import org.fluentlenium.adapter.junit.FluentTest;
+import org.fluentlenium.core.hook.wait.Wait;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
@@ -25,6 +26,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
+@Wait
 public abstract class UiTest extends FluentTest {
     private static JMXConnectorServer jmxConnectorServer;
 

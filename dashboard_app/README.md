@@ -28,11 +28,14 @@ NOTE: Automatic hotloading for static assets [doesn't work if you're using Intel
 - `brew install chromedriver`
 - `./gradlew test`
 - Disable caching tests: `./gradlew clean test`
-- Run just one test: `./gradlew test -D single.test=MainPageTest`
+- Run different sets: 
+    - One test: `./gradlew test -D single.test=MainPageTest`
+    - All tests: `./gradlew test`
+    - Javascript tests: `./gradlew jsTest`
 - More verbosity: 
     - `./gradlew test -i` or 
     - `./gradlew test -D verboseTests`
 - Run just the javascript tests: 
-    - `./gradlew testJs` or
+    - `./gradlew jsTest` or
     - `cd src/main/resources/assets && npm test` or
     - `cd src/main/resources/assets && ./node_modules/.bin/karma start`

@@ -1,0 +1,11 @@
+---
+  name: platform-monitoring
+  buildpack: https://github.com/cloudfoundry/java-buildpack
+  path: build/libs/kbaibot-0.0.1-SNAPSHOT.jar
+  env:
+    JBP_CONFIG_TOMCAT: '{ tomcat: { version: 8.0.+ } }'
+    CALCULATION_INTERVAL: 5000
+    JMX_INTERVAL: 60000
+    JMX_USERNAME: root
+    JMX_PASSWORD: root
+    JMX_SERVICE_URL: service:jmx:rmi://35.185.60.162:44445/jndi/rmi://35.185.60.162:44444/jmxrmi
