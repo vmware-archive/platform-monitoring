@@ -27,6 +27,7 @@ import java.rmi.registry.LocateRegistry;
 import java.util.Arrays;
 import java.util.List;
 
+import static io.pivotal.plaformMonitoring.utils.DataPoint.addDataPoint;
 import static io.pivotal.plaformMonitoring.utils.DataPointBuilder.dataPointBuilder;
 import static java.util.Collections.emptyMap;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -100,10 +101,4 @@ public class ApiTest {
         });
     }
 
-    private void addDataPoint(DataPoint dataPoint, MBeanServer server) throws Exception {
-        DynamicMBean mBean = new DynamicMapMBean(dataPoint, new JMXNamingService());
-        ObjectName mBeanName = new JMXNamingService().getJmxName(dataPoint);
-        server.registerMBean(mBean, mBeanName);
-        mBean.setAttribute(new Attribute(new JMXNamingService().getName(dataPoint), dataPoint.getValue()));
-    }
 }

@@ -1,5 +1,9 @@
 package io.pivotal.plaformMonitoring.utils;
 
+import javax.management.Attribute;
+import javax.management.DynamicMBean;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -51,14 +55,14 @@ public class DataPoint {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         DataPoint dataPoint = (DataPoint) o;
 
-        if(name != null ? !name.equals(dataPoint.name) : dataPoint.name != null) return false;
-        if(value != null ? !value.equals(dataPoint.value) : dataPoint.value != null) return false;
-        if(timestamp != null ? !timestamp.equals(dataPoint.timestamp) : dataPoint.timestamp != null) return false;
+        if (name != null ? !name.equals(dataPoint.name) : dataPoint.name != null) return false;
+        if (value != null ? !value.equals(dataPoint.value) : dataPoint.value != null) return false;
+        if (timestamp != null ? !timestamp.equals(dataPoint.timestamp) : dataPoint.timestamp != null) return false;
         return tags != null ? tags.equals(dataPoint.tags) : dataPoint.tags == null;
     }
 
@@ -69,5 +73,12 @@ public class DataPoint {
         result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
         result = 31 * result + (tags != null ? tags.hashCode() : 0);
         return result;
+    }
+
+    public static void addDataPoint(DataPoint dataPoint, MBeanServer server) throws Exception {
+        DynamicMBean mBean = new DynamicMapMBean(dataPoint, new JMXNamingService());
+        ObjectName mBeanName = new JMXNamingService().getJmxName(dataPoint);
+        server.registerMBean(mBean, mBeanName);
+        mBean.setAttribute(new Attribute(new JMXNamingService().getName(dataPoint), dataPoint.getValue()));
     }
 }

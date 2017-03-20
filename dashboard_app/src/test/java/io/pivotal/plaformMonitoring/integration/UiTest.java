@@ -71,4 +71,10 @@ public abstract class UiTest extends FluentTest {
     public String getBaseUrl() {
         return String.format("localhost:%s", port);
     }
+
+    public static JMXConnectorServer getJmxConnectorServer() {
+        return jmxConnectorServer;
+    }
+
+
 }

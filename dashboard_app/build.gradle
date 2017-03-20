@@ -101,6 +101,5 @@ task jsTest(type: Exec, dependsOn: 'installJs') {
     commandLine 'npm', 'test'
 }
 
-test.dependsOn installJs
 assemble.dependsOn installJs
-build.dependsOn jsTest
+test.dependsOn jsTest
