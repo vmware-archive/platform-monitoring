@@ -16,11 +16,10 @@ export const updateMetrics = dispatch => {
 
       const lossRate = getValue(json, 'calculatedMetric.Firehose.LossRate')
       const throughput = getValue(json, 'DopplerServer.listeners.receivedEnvelopes')
-      const dropped = getValue(json, 'DopplerServer.TruncatingBuffer.totalDroppedMessages')
 
       dispatch({
         type: 'METRICS_UPDATE_SUCCESS',
-        metrics: {lossRate: lossRate, throughput: throughput, dropped: dropped}
+        metrics: {lossRate: lossRate, throughput: throughput}
       })
     })
     .catch(e => dispatch({type: 'METRICS_UPDATE_FAILURE', error: e}))

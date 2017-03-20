@@ -102,4 +102,5 @@ task jsTest(type: Exec, dependsOn: 'installJs') {
 }
 
 test.dependsOn installJs
+assemble.dependsOn installJs
 build.dependsOn jsTest

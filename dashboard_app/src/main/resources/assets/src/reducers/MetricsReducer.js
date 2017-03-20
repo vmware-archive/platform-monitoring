@@ -7,13 +7,11 @@ const defaultState = {
         {name: 'Loss rate', interval: '5m', state: 'Loading...'}
       ],
       [
-        {name: 'Dropped msgs', interval: '5m', state: 'Loading...'},
         {name: 'Throughput', interval: '5m', state: 'Loading...'},
       ]
     ],
     points: [
       {name: 'Loss rate', points: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
-      {name: 'Dropped msgs', points: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
       {name: 'Throughput', points: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
     ]
   },
@@ -68,10 +66,6 @@ const throughputSummation = throughput => {
   return {name: 'Throughput', interval: '5m', state: throughput, status: 'good'}
 }
 
-const droppedMessagesSummation = dropped => {
-  return {name: 'Dropped msgs', interval: '5m', state: dropped, status: 'bad'}
-}
-
 const findPoints = (state, name) => {
   return state.loggingPerformance.points.find(p => {
     return p.name == name
@@ -87,10 +81,9 @@ export default (currentState = defaultState, action) => {
         console.log('Updating metrics!')
         return currentState // no-op, maybe display loading icon later
       case 'METRICS_UPDATE_SUCCESS':
-        const {lossRate, throughput, dropped} = action.metrics
+        const {lossRate, throughput} = action.metrics
 
         const currentLossRatePoints = findPoints(currentState, 'Loss rate')
-        const currentDroppedMessagesPoints = findPoints(currentState, 'Dropped msgs')
         const currentThroughputPoints = findPoints(currentState, 'Throughput')
 
         newState.loggingPerformance = {
@@ -100,12 +93,10 @@ export default (currentState = defaultState, action) => {
             ],
             [
               throughputSummation(throughput),
-              droppedMessagesSummation(dropped),
             ]
           ],
           points: [
             {name: 'Loss rate', points: rotatingArray(currentLossRatePoints, lossRate, 10)},
-            {name: 'Dropped msgs', points: rotatingArray(currentDroppedMessagesPoints, dropped, 10)},
             {name: 'Throughput', points: rotatingArray(currentThroughputPoints, throughput, 10)},
           ]
         }
