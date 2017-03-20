@@ -1,7 +1,7 @@
 ---
   name: platform-monitoring
   buildpack: https://github.com/cloudfoundry/java-buildpack
-  path: build/libs/kbaibot-0.0.1-SNAPSHOT.jar
+  path: build/libs/PlatformMonitoring-0.0.1-SNAPSHOT.jar
   env:
     JBP_CONFIG_TOMCAT: '{ tomcat: { version: 8.0.+ } }'
     CALCULATION_INTERVAL: 5000

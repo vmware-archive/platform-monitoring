@@ -7,7 +7,7 @@ const getValue = (json, identifier) => {
 export const updateMetrics = dispatch => {
   dispatch({type: 'METRICS_UPDATE_START'})
 
-  fetch('http://localhost:8080/loggregator')
+  fetch('/loggregator')
     .then(response => response.json())
     .then(json => {
       if (json.length == 0) {
