@@ -42,8 +42,8 @@ resources:
   type: time
   days: [Monday, Tuesday, Wednesday, Thursday, Friday]
   source:
-    start: 10:35 AM
-    stop: 10:37 AM
+    start: 02:00 AM
+    stop: 03:00 AM
     location: America/Boise
 - name: cf-deployment
   type: git
@@ -59,6 +59,7 @@ resource_types:
     tag: latest
 jobs:
 - name: validate-kpis
+  serial_groups: [kpi]
   plan:
   - get: platform-monitoring
   - get: loggregator
@@ -149,6 +150,7 @@ jobs:
         text: "There are no missing KPIs in the latest cf-deployment! "
         username: KPI Bot
 - name: cf-deployment
+  serial_groups: [kpi]
   plan:
   - get: cf-deployment
   - get: deployments-metrics
@@ -186,7 +188,7 @@ jobs:
 
             bosh2 -n log-in
 
-            #bosh2 -n -d cf delete-deployment
+            bosh2 -n -d cf delete-deployment
 
             bosh2 -n -d cf deploy --vars-store=../deployments-metrics/bosh-deployments/gcp/platform-ops/cf-deployment-vars.yml -v system_domain=cf.platform-ops.gcp.pcf-metrics.com  cf-deployment.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_app_metrics_processing.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_10_diego_cells.yml
 
