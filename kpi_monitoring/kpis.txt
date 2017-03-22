@@ -10,7 +10,7 @@ bbs.LRPsMissing
 bbs.LRPsRunning
 bbs.RequestLatency
 DopplerServer.doppler.shedEnvelopes
-DopplerServer.listeners.receivedEnvelopes
+DopplerServer.listeners.totalReceivedMessageCount
 DopplerServer.TruncatingBuffer.totalDroppedMessages
 gorouter.bad_gateways
 gorouter.latency
