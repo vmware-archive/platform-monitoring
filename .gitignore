@@ -8,3 +8,4 @@ build
 dashboard_app/src/main/resources/static
 *node_modules/
 *dist
+/target
