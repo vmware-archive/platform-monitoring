@@ -1,0 +1,208 @@
+---
+env_params: &env_params
+  CF_USERNAME: {{kpi-validator-cf-username}}
+  CF_PASSWORD: {{kpi-validator-cf-password}}
+  DOMAIN: {{kpi-validator-domain}}
+  PROVIDER_IP: {{kpi-validator-provider-ip}}
+  PROVIDER_USERNAME: {{kpi-validator-provider-username}}
+  PROVIDER_PASSWORD: {{kpi-validator-provider-password}}
+  RUN_TIME_MINUTES: {{kpi-validator-run-time-minutes}}
+  BOSH_URL: {{kpi-validator-bosh-url}}
+  BOSH_USER: {{kpi-validator-bosh-username}}
+  BOSH_PASSWORD: {{kpi-validator-bosh-password}}
+  BOSH_ENVIRONMENT: {{kpi-validator-bosh-url}}
+  BOSH_CLIENT: {{kpi-validator-bosh-username}}
+  BOSH_CLIENT_SECRET: {{kpi-validator-bosh-password}}
+
+resources:
+- name: platform-monitoring
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/platform-monitoring
+    branch: master
+    private_key: {{metrix-git-key}}
+- name: deployments-metrics
+  type: git
+  source:
+    uri: git@github.com:pivotal-cf/deployments-metrics
+    branch: master
+    private_key: {{metrix-git-key}}
+- name: loggregator
+  type: git
+  source:
+    uri: git@github.com:cloudfoundry/loggregator
+    branch: master
+    private_key: {{metrix-git-key}}
+    tag_filter: v77
+- name: slack-alert
+  type: slack-notification
+  source:
+    url: https://hooks.slack.com/services/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
+- name: every-weekday-morning
+  type: time
+  days: [Monday, Tuesday, Wednesday, Thursday, Friday]
+  source:
+    start: 10:35 AM
+    stop: 10:37 AM
+    location: America/Boise
+- name: cf-deployment
+  type: git
+  source:
+    uri: git@github.com:cloudfoundry/cf-deployment
+    branch: master
+    private_key: {{metrix-git-key}}
+resource_types:
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
+jobs:
+- name: validate-kpis
+  plan:
+  - get: platform-monitoring
+  - get: loggregator
+  - get: deployments-metrics
+  - get: every-weekday-morning
+    trigger: true
+    passed: [cf-deployment]
+  - task: compare-kpis
+    config:
+      platform: linux
+      image: docker:///pivotalcf/1.7_metrix
+
+      inputs:
+      - name: platform-monitoring
+      - name: loggregator
+      - name: deployments-metrics
+
+      outputs:
+      - name: results
+        path: ""
+
+      params:
+        <<: *env_params
+
+      run:
+        path: bash
+        args:
+          - -c
+          - |
+            #!/bin/bash
+            set -ex
+
+            cf login -a "api.$DOMAIN" -u $CF_USERNAME -p $CF_PASSWORD -o system --skip-ssl-validation
+            cf create-space platform-metrics || true
+            cf target -s platform-metrics
+            cf delete logspinner -r -f || true
+            cf create-user-provided-service kpi-cups -l syslog://$DOMAIN:12345 || true
+
+            cf push 500-error -p platform-monitoring/kpi_monitoring/assets/500-error.jar
+            cf push bad-gateway -p platform-monitoring/kpi_monitoring/assets/bad-gateway.jar -u none
+
+            siege -t 3s http://500-error.$DOMAIN/greeting
+            siege -t 3s http://bad-gateway.$DOMAIN
+
+            cf delete-orphaned-routes -f
+
+            cd loggregator/src/tools/logspinner
+              cf push logspinner
+              cf scale -i 50 logspinner
+              cf bind-service logspinner kpi-cups || true
+              cf restage logspinner
+              siege -c 50 -t 10s https://logspinner.$DOMAIN/?delay=1ns\&cycles=10000000
+            cd -
+
+            pushd platform-monitoring/kpi_monitoring
+              set +e
+              ./runValidator.sh
+              export exitStatus=`echo $?`
+            popd
+
+            mv platform-monitoring/kpi_monitoring/missing_kpis results
+
+            # BOSH DEPLOYMENT COMMANDS, NOT OM
+            bosh -n target $BOSH_URL
+            bosh login $BOSH_USER $BOSH_PASSWORD
+            bosh cleanup --all
+            bosh releases > results/cf_version
+
+            cf unbind-service logspinner kpi-cups
+            cf delete-service kpi-cups -f
+            cf delete logspinner -r -f
+            cf delete 500-error -r -f
+            cf delete bad-gateway -r -f
+            exit $exitStatus
+
+    on_failure:
+      put: slack-alert
+      inputs:
+      - name: results
+      params:
+        text: "There are missing KPIs in the latest cf-deployment! \n $( cat results/missing_kpis ) \n Release Versions: \n $( cat results/cf_version ) "
+        username: KPI Bot
+    on_success:
+      put: slack-alert
+      inputs:
+      - name: results
+      params:
+        text: "There are no missing KPIs in the latest cf-deployment! "
+        username: KPI Bot
+- name: cf-deployment
+  plan:
+  - get: cf-deployment
+  - get: deployments-metrics
+  - get: every-weekday-morning
+    trigger: true
+  - task: deploy
+    config:
+      platform: linux
+      image: docker:///pivotalcf/1.7_metrix
+
+      inputs:
+      - name: cf-deployment
+      - name: deployments-metrics
+
+      outputs:
+      - name: results
+        path: ""
+
+      params:
+        <<: *env_params
+
+      run:
+        path: bash
+        args:
+          - -c
+          - |
+            #!/bin/bash
+            set -ex
+
+            unset BOSH_USER
+
+            cd cf-deployment
+            export BOSH_CA_CERT=`cat ../deployments-metrics/bosh-deployments/gcp/platform-ops/director_cert`
+            bosh2 --ca-cert ../deployments-metrics/bosh-deployments/gcp/platform-ops/director_cert alias-env platform-ops  -e https://104.196.55.182:25555
+
+            bosh2 -n log-in
+
+            #bosh2 -n -d cf delete-deployment
+
+            bosh2 -n -d cf deploy --vars-store=../deployments-metrics/bosh-deployments/gcp/platform-ops/cf-deployment-vars.yml -v system_domain=cf.platform-ops.gcp.pcf-metrics.com  cf-deployment.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_app_metrics_processing.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_10_diego_cells.yml
+
+            bosh2 -n -d pcf-jmxbridge-v1.8 restart
+
+    on_failure:
+      put: slack-alert
+      inputs:
+      - name: results
+      params:
+        text: "cf-deployment failed "
+        username: KPI Bot
+    on_success:
+      put: slack-alert
+      inputs:
+      - name: results
+      params:
+        text: "cf-deployment succeeded! "
+        username: KPI Bot
