@@ -92,9 +92,9 @@ jobs:
             #!/bin/bash
             set -ex
 
-            cf login -a "api.$DOMAIN" -u $CF_USERNAME -p $CF_PASSWORD -o system -s platform_monitoring --skip-ssl-validation
-            cf create-space platform-metrics || true
-            cf target -s platform-metrics
+            cf login -a "api.$DOMAIN" -u $CF_USERNAME -p $CF_PASSWORD -o system  --skip-ssl-validation
+            cf create-space platform_monitoring || true
+            cf target -s platform_monitoring
             cf delete logspinner -r -f || true
             cf create-user-provided-service kpi-cups -l syslog://$DOMAIN:12345 || true
 

@@ -3,7 +3,7 @@ set +e
 
 if [ -z "$1" ]
   then
-    echo "usage ./set-pipeline cf | opsman | redeploy-cf"
+    echo "usage ./set-pipeline cf | opsman | kpi-validator"
     exit
 fi
 
