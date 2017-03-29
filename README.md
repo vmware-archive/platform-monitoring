@@ -1,10 +1,6 @@
-# Running
+# platform-monitoring
 
-RUN_TIME_MINUTES=1 \
-  PROVIDER_IP=104.196.193.116 \
-  CF_DEPLOYMENT_NAME=cf \
-  NOZZLE_PREFIX=opentsdb.nozzle. \
-  POLL_INTERVAL_SECONDS=5 \
-  PROVIDER_USERNAME=admin \
-  PROVIDER_PASSWORD=ASDFlkkjlaiWERiaklljw \
-  ./runValidator.sh
+KPI Validator Job: https://pcf-metrics.ci.cf-app.com/teams/main/pipelines/kpi-validator/jobs/validate-kpis
+* Runs every morning at 6am Denver time (Mountain Time)
+* Runs against latest cf-release. Keeping cf release the latest is automated (https://pcf-metrics.ci.cf-app.com/teams/main/pipelines/kpi-validator/jobs/cf-deployment)
+
