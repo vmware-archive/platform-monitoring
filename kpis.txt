@@ -29,10 +29,3 @@ rep.RepBulkSyncDuration
 rep.UnhealthyCell
 route_emitter.ConsulDownMode
 route_emitter.RouteEmitterSyncDuration
-bosh.system.cpu.user
-bosh.system.disk.system.percent
-bosh.system.disk.ephemeral.percent
-bosh.system.disk.persistent.percent
-bosh.system.healthy
-bosh.system.load.1m
-bosh.system.mem.percent
