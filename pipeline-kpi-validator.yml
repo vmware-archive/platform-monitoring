@@ -3,9 +3,6 @@ env_params: &env_params
   CF_USERNAME: {{kpi-validator-cf-username}}
   CF_PASSWORD: {{kpi-validator-cf-password}}
   DOMAIN: {{kpi-validator-domain}}
-  PROVIDER_IP: {{kpi-validator-provider-ip}}
-  PROVIDER_USERNAME: {{kpi-validator-provider-username}}
-  PROVIDER_PASSWORD: {{kpi-validator-provider-password}}
   RUN_TIME_MINUTES: {{kpi-validator-run-time-minutes}}
   BOSH_URL: {{kpi-validator-bosh-url}}
   BOSH_USER: {{kpi-validator-bosh-username}}
@@ -100,8 +97,6 @@ jobs:
             #bosh2 -n -d cf delete-deployment
 
             bosh2 -n -d cf deploy --vars-store=../deployments-metrics/bosh-deployments/gcp/platform-ops/cf-deployment-vars.yml -v system_domain=cf.platform-ops.gcp.pcf-metrics.com  cf-deployment.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_app_metrics_processing.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_10_diego_cells.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_3_gorouters.yml
-
-            bosh2 -n -d pcf-jmxbridge-v1.8 recreate
 
             bosh2 -n -d platform-monitoring-app-dev run-errand push-apps
 
