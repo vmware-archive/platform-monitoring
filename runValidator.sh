@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 set -ex
 
-gradle clean
-gradle build
-
 java \
      -DCF_DEPLOYMENT_NAME=cf \
      -DCF_API=api.$DOMAIN \

@@ -175,7 +175,16 @@ jobs:
           - |
             #!/bin/bash
             set -ex
-
+            FAIL=0
+             pushd platform-monitoring
+               set +e
+               gradle clean
+               gradle build
+               ./runValidator.sh &
+               PID=$!
+               echo $PID
+             popd
+            sleep 30s
             cf login -a "api.$DOMAIN" -u $CF_USERNAME -p $CF_PASSWORD -o system  --skip-ssl-validation
             cf create-space platform_monitoring || true
             cf target -s platform_monitoring
@@ -198,12 +207,7 @@ jobs:
               siege -c 50 -t 10s https://logspinner.$DOMAIN/?delay=1ns\&cycles=10000000
             cd -
 
-            pushd platform-monitoring
-              set +e
-              ./runValidator.sh
-              export exitStatus=`echo $?`
-            popd
-
+            wait $PID || let "FAIL+=1"
             mv platform-monitoring/missing_kpis results
 
             # BOSH DEPLOYMENT COMMANDS, NOT OM
@@ -217,7 +221,7 @@ jobs:
             cf delete logspinner -r -f
             cf delete 500-error -r -f
             cf delete bad-gateway -r -f
-            exit $exitStatus
+            exit $FAIL
 
     on_failure:
       put: slack-alert
