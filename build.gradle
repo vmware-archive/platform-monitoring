@@ -28,7 +28,8 @@ dependencies {
      'io.projectreactor:reactor-core:3.0.6.RELEASE',
      'io.projectreactor.ipc:reactor-netty:0.6.2.RELEASE',
      'org.slf4j:slf4j-log4j12:1.7.25',
-     'org.slf4j:slf4j-api:1.7.25'
+     'org.slf4j:slf4j-api:1.7.25',
+     'com.jamonapi:jamon:2.81'
     )
 
 

@@ -1,11 +1,14 @@
 package io.pivotal.platformMonitoring.kpiValidator;
 
+import com.jamonapi.MonKeyImp;
+import com.jamonapi.MonitorFactory;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,8 +28,8 @@ public class Validator {
         try {
             Validator validator = new Validator();
             log.info("Running validator");
-            Set<String> names = CloudfoundryClientWrapper.getValueMetricsAndCounterEvents(CF_API, CF_USERNAME, CF_PASSWORD, new Double(RUN_TIME_MINUTES * 60 * 1000).longValue());
-            validator.run(names);
+            CloudfoundryClientWrapper.getValueMetricsAndCounterEvents(CF_API, CF_USERNAME, CF_PASSWORD, new Double(RUN_TIME_MINUTES * 60 * 1000).longValue());
+            validator.run();
         } catch(Exception e) {
             e.printStackTrace();
             System.exit(1);
@@ -39,10 +42,13 @@ public class Validator {
             .collect(toList());
     }
 
-    public void run(Set<String> names) throws Exception {
+    public void run() throws Exception {
+        HashSet<String> names = new HashSet<>();
+        MonitorFactory.getMap().keySet().stream().forEach(name -> names.add(((MonKeyImp)name).getLabel()));
+
         names.stream()
             .sorted()
-            .forEach(System.out::println);
+            .forEach(name -> {log.info(name+": "+MonitorFactory.getMonitor(name, "hits").getHits());});
 
         List<String> missingKpis = readMetrics().stream()
             .filter(m -> !m.isEmpty())

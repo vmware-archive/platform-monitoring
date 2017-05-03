@@ -1,5 +1,6 @@
 package io.pivotal.platformMonitoring.kpiValidator;
 
+import com.jamonapi.MonitorFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,21 +25,21 @@ public class ValidatorTest {
 
     @Test
     public void itExitsWithZeroIfNoMissingKPIs() throws Exception {
-        validator.run(receivedMetrics());
+        receivedMetrics();
+        validator.run();
     }
 
     @Test
     public void itExitsWithOneIfMissingKPIs() throws Exception{
         try {
-            validator.run(new HashSet<String>());;
+            validator.run();;
         } catch( RuntimeException e) {
             assert(e.getMessage()).equals(Validator.MISSING_KPIS);
         }
     }
 
-    private static Set<String> receivedMetrics() throws IOException {
-        return new HashSet<>(Files.lines(Paths.get(KPI_FILE_NAME))
-            .collect(toList()));
+    private static void receivedMetrics() throws IOException {
+        Files.lines(Paths.get(KPI_FILE_NAME)).forEach(kpi -> MonitorFactory.add(kpi, "hits", 1.0));
     }
 
 }
