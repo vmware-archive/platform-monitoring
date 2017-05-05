@@ -5,14 +5,12 @@ import com.jamonapi.MonitorFactory;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static java.util.stream.Collectors.toList;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Validator {
     private static Logger log = Logger.getLogger(Validator.class);
@@ -37,9 +35,12 @@ public class Validator {
         System.exit(0);
     }
 
-    private static List<String> readMetrics() throws IOException {
-        return Files.lines(Paths.get(KPI_FILE_NAME))
-            .collect(toList());
+    private static Map<String, String> readMetrics() throws IOException {
+        Stream<String> lines = Files.lines(Paths.get(KPI_FILE_NAME));
+        Map<String, String> resultMap = lines.map(line -> line.split(","))
+                .collect(Collectors.toMap(line -> line[0], line -> line[1]));
+        lines.close();
+        return resultMap;
     }
 
     public void run() throws Exception {
@@ -50,25 +51,31 @@ public class Validator {
             .sorted()
             .forEach(name -> {log.info(name+": "+MonitorFactory.getMonitor(name, "hits").getHits());});
 
-        List<String> missingKpis = readMetrics().stream()
-            .filter(m -> !m.isEmpty())
-            .filter(m -> !names.contains(m))
-            .collect(toList());
+        Map<String, String> missingKpis = readMetrics()
+                .entrySet()
+                .stream()
+            .filter(m -> !m.getKey().isEmpty())
+            .filter(m -> !names.contains(m.getKey()))
+            .collect(Collectors.toMap(m -> m.getKey(), m -> m.getValue()));
+
+        System.out.println("**********************************");
+        System.out.println(missingKpis.toString());
+        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 
         if(missingKpis.isEmpty()) {
             log.info(NO_MISSING_KPIS);
             return;
         } else {
-            PrintWriter writer = new PrintWriter("missing_kpis", "UTF-8");
-
-            missingKpis.stream()
-                .map(m -> String.format("MISSING KPI: %s%s", m, System.lineSeparator()))
-                .forEach(m -> {
-                    log.info(m);
-                    writer.write(m);
-                });
-
-            writer.close();
+//            PrintWriter writer = new PrintWriter("missing_kpis", "UTF-8");
+//
+//            missingKpis.stream()
+//                .map(m -> String.format("MISSING KPI: %s%s", m, System.lineSeparator()))
+//                .forEach(m -> {
+//                    log.info(m);
+//                    writer.write(m);
+//                });
+//
+//            writer.close();
 
             log.info(MISSING_KPIS);
             throw new RuntimeException(MISSING_KPIS);
