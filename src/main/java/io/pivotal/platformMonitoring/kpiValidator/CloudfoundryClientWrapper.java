@@ -14,8 +14,9 @@ import java.util.*;
 
 public class CloudfoundryClientWrapper {
     private static Logger log = Logger.getLogger(CloudfoundryClientWrapper.class);
-    public static void getValueMetricsAndCounterEvents(String api, String username, String password, long duration) throws Exception{
+    public static MetricCounter getValueMetricsAndCounterEvents(String api, String username, String password, long duration) throws Exception{
         log.info("Started Capturing Metrics: " + Calendar.getInstance().getTime() + " " + duration);
+        MetricCounter metricCounter = new MetricCounter();
         DefaultConnectionContext defaultConnectionContext = DefaultConnectionContext.builder()
             .apiHost(api)
             .skipSslValidation(true)
@@ -37,11 +38,11 @@ public class CloudfoundryClientWrapper {
         cfEvents
             .filter(e -> e.getEventType().equals(EventType.COUNTER_EVENT) || e.getEventType().equals(EventType.VALUE_METRIC))
             .subscribe(e -> {
-                MonitorFactory.add(getName(e), "hits", 1.0);
+                metricCounter.addMetric(getName(e), e.getIndex());
             });
         Thread.sleep(duration);
         log.info("Stopped Capturing Metrics: " + Calendar.getInstance().getTime());
-        log.info(String.format("Received %d metrics.", MonitorFactory.getTotalKeySize()));
+        return metricCounter;
     }
 
     private static String getName(Envelope e) {
