@@ -76,7 +76,6 @@ public class Validator {
             missingKpis.stream()
                 .map(m -> String.format("MISSING KPI: %s%s", m, System.lineSeparator()))
                 .forEach(m -> {
-                    log.info(m);
                     writer.write(m);
                 });
 
@@ -95,7 +94,6 @@ public class Validator {
             mismatchedEmissionTimes.stream()
                 .map(m -> String.format("WRONG FREQUENCY: %s%s", m, System.lineSeparator()))
                 .forEach(m -> {
-                    log.info(m);
                     writer.write(m);
                 });
             writer.close();

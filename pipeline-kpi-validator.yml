@@ -96,7 +96,7 @@ jobs:
 
             #bosh2 -n -d cf delete-deployment
 
-            bosh2 -n -d cf deploy --vars-store=../deployments-metrics/bosh-deployments/gcp/platform-ops/cf-deployment-vars.yml -v system_domain=cf.platform-ops.gcp.pcf-metrics.com  cf-deployment.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_app_metrics_processing.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_10_diego_cells.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_3_gorouters.yml
+            bosh2 -n -d cf deploy --vars-store=../deployments-metrics/bosh-deployments/gcp/platform-ops/cf-deployment-vars.yml -v system_domain=cf.platform-ops.gcp.pcf-metrics.com  cf-deployment.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_app_metrics_processing.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_3_diego_cells.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_3_gorouters.yml
 
             bosh2 -n -d platform-monitoring-app-dev run-errand push-apps
 
@@ -188,8 +188,6 @@ jobs:
             cf login -a "api.$DOMAIN" -u $CF_USERNAME -p $CF_PASSWORD -o system  --skip-ssl-validation
             cf create-space platform_monitoring || true
             cf target -s platform_monitoring
-            cf delete logspinner -r -f || true
-            cf create-user-provided-service kpi-cups -l syslog://$DOMAIN:12345 || true
 
             cf push 500-error -p platform-monitoring/assets/500-error.jar
             cf push bad-gateway -p platform-monitoring/assets/bad-gateway.jar -u none
@@ -198,14 +196,6 @@ jobs:
             siege -t 3s http://bad-gateway.$DOMAIN
 
             cf delete-orphaned-routes -f
-
-            cd loggregator/src/tools/logspinner
-              cf push logspinner
-              cf scale -i 50 logspinner
-              cf bind-service logspinner kpi-cups || true
-              cf restage logspinner
-              siege -c 50 -t 10s https://logspinner.$DOMAIN/?delay=1ns\&cycles=10000000
-            cd -
 
             wait $PID || let "FAIL+=1"
             mv platform-monitoring/missing_kpis results
