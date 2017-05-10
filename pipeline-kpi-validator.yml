@@ -179,7 +179,7 @@ jobs:
              pushd platform-monitoring
                set +e
                gradle clean
-               gradle build -DskipTests
+               gradle jar -DskipTests=true
                ./runValidator.sh &
                PID=$!
                echo $PID
@@ -199,6 +199,7 @@ jobs:
 
             wait $PID || let "FAIL+=1"
             mv platform-monitoring/missing_kpis results
+            mv platform-monitoring/mismatched_times results
 
             # BOSH DEPLOYMENT COMMANDS, NOT OM
             bosh -n target $BOSH_URL
@@ -218,12 +219,12 @@ jobs:
       inputs:
       - name: results
       params:
-        text: "There are missing KPIs in the latest cf-deployment! \n $( cat results/missing_kpis ) \n $( cat results/mismatched_times ) \n Release Versions: \n $( cat results/cf_version ) "
+        text: "The KPI Validator pipeline failed! \n $( cat results/missing_kpis ) \n $( cat results/mismatched_times ) \n Release Versions: \n $( cat results/cf_version ) "
         username: KPI Bot
     on_success:
       put: slack-alert
       inputs:
       - name: results
       params:
-        text: "There are no missing KPIs in the latest cf-deployment! "
+        text: "The KPI Validator pipeline succeeded! "
         username: KPI Bot
