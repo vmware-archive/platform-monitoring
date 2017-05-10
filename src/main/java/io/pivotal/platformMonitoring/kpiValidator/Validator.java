@@ -1,16 +1,15 @@
 package io.pivotal.platformMonitoring.kpiValidator;
 
-import com.jamonapi.MonKeyImp;
-import com.jamonapi.MonitorFactory;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-import io.jsonwebtoken.lang.Strings;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

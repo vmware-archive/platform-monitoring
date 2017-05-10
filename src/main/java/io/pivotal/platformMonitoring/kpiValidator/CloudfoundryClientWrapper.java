@@ -1,6 +1,5 @@
 package io.pivotal.platformMonitoring.kpiValidator;
 
-import com.jamonapi.MonitorFactory;
 import org.apache.log4j.Logger;
 import org.cloudfoundry.doppler.Envelope;
 import org.cloudfoundry.doppler.EventType;
@@ -10,7 +9,8 @@ import org.cloudfoundry.reactor.doppler.ReactorDopplerClient;
 import org.cloudfoundry.reactor.tokenprovider.PasswordGrantTokenProvider;
 import reactor.core.publisher.Flux;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.UUID;
 
 public class CloudfoundryClientWrapper {
     private static Logger log = Logger.getLogger(CloudfoundryClientWrapper.class);
