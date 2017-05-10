@@ -12,11 +12,11 @@ bbs.RequestLatency,-1
 DopplerServer.doppler.shedEnvelopes,5
 DopplerServer.listeners.totalReceivedMessageCount,5
 DopplerServer.TruncatingBuffer.totalDroppedMessages,5
-gorouter.bad_gateways,5
+gorouter.bad_gateways,-1
 gorouter.latency,-1
 gorouter.ms_since_last_registry_update,30
-gorouter.responses.5xx,5
-gorouter.total_requests,5
+gorouter.responses.5xx,-1
+gorouter.total_requests,-1
 gorouter.total_routes,30
 nsync_bulker.DesiredLRPSyncDuration,30
 rep.CapacityRemainingContainers,-1
