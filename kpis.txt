@@ -1,7 +1,7 @@
-auctioneer.AuctioneerFetchStatesDuration,30
-auctioneer.AuctioneerLRPAuctionsFailed,30
-auctioneer.AuctioneerLRPAuctionsStarted,30
-auctioneer.AuctioneerTaskAuctionsFailed,30
+auctioneer.AuctioneerFetchStatesDuration,-1
+auctioneer.AuctioneerLRPAuctionsFailed,-1
+auctioneer.AuctioneerLRPAuctionsStarted,-1
+auctioneer.AuctioneerTaskAuctionsFailed,-1
 bbs.ConvergenceLRPDuration,-1
 bbs.CrashedActualLRPs,30
 bbs.Domain.cf-apps,30
