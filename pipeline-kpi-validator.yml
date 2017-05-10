@@ -179,7 +179,7 @@ jobs:
              pushd platform-monitoring
                set +e
                gradle clean
-               gradle build
+               gradle build -DskipTests
                ./runValidator.sh &
                PID=$!
                echo $PID
@@ -218,7 +218,7 @@ jobs:
       inputs:
       - name: results
       params:
-        text: "There are missing KPIs in the latest cf-deployment! \n $( cat results/missing_kpis ) \n Release Versions: \n $( cat results/cf_version ) "
+        text: "There are missing KPIs in the latest cf-deployment! \n $( cat results/missing_kpis ) \n $( cat results/mismatched_times ) \n Release Versions: \n $( cat results/cf_version ) "
         username: KPI Bot
     on_success:
       put: slack-alert

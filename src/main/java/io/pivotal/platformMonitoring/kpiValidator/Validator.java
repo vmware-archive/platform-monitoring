@@ -2,6 +2,7 @@ package io.pivotal.platformMonitoring.kpiValidator;
 
 import com.jamonapi.MonKeyImp;
 import com.jamonapi.MonitorFactory;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import io.jsonwebtoken.lang.Strings;
 import org.apache.log4j.Logger;
 
@@ -68,38 +69,20 @@ public class Validator {
 
         if(missingKpis.isEmpty()) {
             log.info(NO_MISSING_KPIS);
-            log.info("1************************");
         } else {
-            log.info("2************************");
             print(MISSING_KPIS, missingKpis.stream());
-
-            PrintWriter writer = new PrintWriter("missing_kpis", "UTF-8");
-            missingKpis.stream()
-                .map(m -> String.format("MISSING KPI: %s%s", m, System.lineSeparator()))
-                .forEach(m -> {
-                    log.info("#$%$%^&^%^*&^*(*(&(&*(*&");
-                    writer.write(m);
-                });
-
-            writer.close();
+            filePrint("missing_kpis", "MISSING KPI: %s%s", missingKpis.stream());
         }
 
         HashSet<String> mismatchedEmissionTimes = checkHits(kpiMap, metricCounter);
         print("MISMATCHED FREQUENCIES", mismatchedEmissionTimes.stream());
 
         if(mismatchedEmissionTimes.isEmpty()) {
-            log.info("3************************");
             log.info(EMISSION_TIMES_CORRECT);
+            filePrint("mismatched_times", "%s", Arrays.asList(EMISSION_TIMES_CORRECT).stream());
         } else {
             log.info(MISMATCHED_EMISSION_TIMES);
-            log.info("4************************");
-            PrintWriter writer = new PrintWriter("mismatchedTimes", "UTF-8");
-            mismatchedEmissionTimes.stream()
-                .map(m -> String.format("WRONG FREQUENCY: %s%s", m, System.lineSeparator()))
-                .forEach(m -> {
-                    writer.write(m);
-                });
-            writer.close();
+            filePrint("mismatched_times", "WRONG FREQUENCY: %s%s", mismatchedEmissionTimes.stream());
         }
 
         if(!missingKpis.isEmpty()){
@@ -107,6 +90,16 @@ public class Validator {
         }else if(!mismatchedEmissionTimes.isEmpty()){
             throw new RuntimeException(MISMATCHED_EMISSION_TIMES);
         }
+    }
+
+    private void filePrint(String fileName, String format, Stream<String> stream) throws IOException{
+        PrintWriter writer = new PrintWriter(fileName, "UTF-8");
+        stream
+            .map(m -> String.format(format, m, System.lineSeparator()))
+            .forEach(m -> {
+                writer.write(m);
+            });
+        writer.close();
     }
 
     private void print(String banner, Stream<String> stream) {

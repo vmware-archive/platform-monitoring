@@ -10,3 +10,5 @@ dashboard_app/src/main/resources/static
 *dist
 /target
 missing_kpis
+mismatched_times
+validator.log*
