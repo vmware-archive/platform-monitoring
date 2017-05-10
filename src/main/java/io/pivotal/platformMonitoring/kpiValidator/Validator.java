@@ -77,6 +77,7 @@ public class Validator {
             missingKpis.stream()
                 .map(m -> String.format("MISSING KPI: %s%s", m, System.lineSeparator()))
                 .forEach(m -> {
+                    log.info("#$%$%^&^%^*&^*(*(&(&*(*&");
                     writer.write(m);
                 });
 
