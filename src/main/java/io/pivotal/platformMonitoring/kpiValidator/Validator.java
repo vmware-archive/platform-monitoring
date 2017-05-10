@@ -68,8 +68,9 @@ public class Validator {
 
         if(missingKpis.isEmpty()) {
             log.info(NO_MISSING_KPIS);
+            log.info("1************************");
         } else {
-
+            log.info("2************************");
             print(MISSING_KPIS, missingKpis.stream());
 
             PrintWriter writer = new PrintWriter("missing_kpis", "UTF-8");
@@ -86,10 +87,11 @@ public class Validator {
         print("MISMATCHED FREQUENCIES", mismatchedEmissionTimes.stream());
 
         if(mismatchedEmissionTimes.isEmpty()) {
+            log.info("3************************");
             log.info(EMISSION_TIMES_CORRECT);
         } else {
             log.info(MISMATCHED_EMISSION_TIMES);
-
+            log.info("4************************");
             PrintWriter writer = new PrintWriter("mismatchedTimes", "UTF-8");
             mismatchedEmissionTimes.stream()
                 .map(m -> String.format("WRONG FREQUENCY: %s%s", m, System.lineSeparator()))
