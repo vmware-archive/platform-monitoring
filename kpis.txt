@@ -29,3 +29,5 @@ rep.RepBulkSyncDuration,30
 rep.UnhealthyCell,30
 route_emitter.ConsulDownMode,-1
 route_emitter.RouteEmitterSyncDuration,60
+scalablesyslog.adapter.dropped,60
+scalablesyslog.scheduler.drains,60
