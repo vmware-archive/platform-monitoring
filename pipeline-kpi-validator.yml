@@ -57,6 +57,7 @@ resource_types:
     tag: latest
 jobs:
 - name: cf-deployment
+  build_logs_to_retain: 25
   serial_groups: [kpi]
   plan:
   - get: cf-deployment
@@ -126,6 +127,7 @@ jobs:
         text: "cf-deployment succeeded! "
         username: KPI Bot
 - name: run-tests
+  build_logs_to_retain: 25
   plan:
   - get: platform-monitoring
     trigger: true
@@ -156,6 +158,7 @@ jobs:
             gradle clean
             gradle test
 - name: validate-kpis
+  build_logs_to_retain: 25
   serial_groups: [kpi]
   plan:
   - get: platform-monitoring
