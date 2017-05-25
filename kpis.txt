@@ -18,7 +18,6 @@ gorouter.ms_since_last_registry_update,30
 gorouter.responses.5xx,-1
 gorouter.total_requests,-1
 gorouter.total_routes,30
-nsync_bulker.DesiredLRPSyncDuration,30
 rep.CapacityRemainingContainers,-1
 rep.CapacityTotalContainers,-1
 rep.CapacityRemainingDisk,60
@@ -27,7 +26,6 @@ rep.CapacityTotalDisk,-1
 rep.CapacityTotalMemory,-1
 rep.RepBulkSyncDuration,30
 rep.UnhealthyCell,30
-route_emitter.ConsulDownMode,-1
 route_emitter.RouteEmitterSyncDuration,60
 scalablesyslog.adapter.dropped,60
 scalablesyslog.scheduler.drains,60
