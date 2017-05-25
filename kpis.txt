@@ -27,5 +27,5 @@ rep.CapacityTotalMemory,-1
 rep.RepBulkSyncDuration,30
 rep.UnhealthyCell,30
 route_emitter.RouteEmitterSyncDuration,60
-scalablesyslog.adapter.dropped,60
-scalablesyslog.scheduler.drains,60
+Locket.ActiveLocks,-1
+Locket.ActivePresences,-1
