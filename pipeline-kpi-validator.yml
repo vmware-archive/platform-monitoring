@@ -190,7 +190,7 @@ jobs:
                echo $PID
              popd
             sleep 30s
-            cf login -a "api.$DOMAIN" -u $CF_USERNAME -p $CF_PASSWORD -o system  --skip-ssl-validation
+            cf login -a "api.$DOMAIN" -u $CF_USERNAME -p $CF_PASSWORD -o system -s system --skip-ssl-validation
             cf create-space platform_monitoring || true
             cf target -s platform_monitoring
 
