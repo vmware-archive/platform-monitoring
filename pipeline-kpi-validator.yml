@@ -2,7 +2,8 @@
 env_params: &env_params
   CF_USERNAME: {{kpi-validator-cf-username}}
   CF_PASSWORD: {{kpi-validator-cf-password}}
-  DOMAIN: {{kpi-validator-domain}}
+  SYS_DOMAIN: {{kpi-validator-sys-domain}}
+  APPS_DOMAIN: {{kpi-validator-apps-domain}}
   RUN_TIME_MINUTES: {{kpi-validator-run-time-minutes}}
   BOSH_URL: {{kpi-validator-bosh-url}}
   BOSH_USER: {{kpi-validator-bosh-username}}
@@ -190,15 +191,15 @@ jobs:
                echo $PID
              popd
             sleep 30s
-            cf login -a "api.$DOMAIN" -u $CF_USERNAME -p $CF_PASSWORD -o system -s system --skip-ssl-validation
+            cf login -a "api.$SYS_DOMAIN" -u $CF_USERNAME -p $CF_PASSWORD -o system -s system --skip-ssl-validation
             cf create-space platform_monitoring || true
             cf target -s platform_monitoring
 
             cf push 500-error -p platform-monitoring/assets/500-error.jar
             cf push bad-gateway -p platform-monitoring/assets/bad-gateway.jar -u none
 
-            siege -t 3s http://500-error.$DOMAIN/greeting
-            siege -t 3s http://bad-gateway.$DOMAIN
+            siege -t 3s http://500-error.$APPS_DOMAIN/greeting
+            siege -t 3s http://bad-gateway.$APPS_DOMAIN
 
             cf delete-orphaned-routes -f
 
