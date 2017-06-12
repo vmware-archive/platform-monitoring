@@ -66,7 +66,11 @@ jobs:
   - task: deploy
     config:
       platform: linux
-      image: docker:///pivotalcf/1.7_metrix
+      image_resource:
+        type: docker-image
+        source:
+          repository: pivotalcf/1.7_metrix
+          tag: latest
 
       inputs:
       - name: cf-deployment
@@ -99,6 +103,7 @@ jobs:
 
             bosh2 -n -d cf deploy --vars-store=../deployments-metrics/bosh-deployments/gcp/platform-ops/cf-deployment-vars.yml \
             -v system_domain=cf.platform-ops.gcp.pcf-metrics.com  cf-deployment.yml \
+            -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_platform_monitoring_group.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_app_metrics_processing.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_3_diego_cells.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_3_gorouters.yml \
@@ -130,7 +135,11 @@ jobs:
   - task: compare-kpis
     config:
       platform: linux
-      image: docker:///pivotalcf/1.7_metrix
+      image_resource:
+        type: docker-image
+        source:
+          repository: pivotalcf/1.7_metrix
+          tag: latest
 
       inputs:
       - name: platform-monitoring
@@ -160,7 +169,11 @@ jobs:
   - task: compare-kpis
     config:
       platform: linux
-      image: docker:///pivotalcf/1.7_metrix
+      image_resource:
+        type: docker-image
+        source:
+          repository: pivotalcf/1.7_metrix
+          tag: latest
 
       inputs:
       - name: platform-monitoring
