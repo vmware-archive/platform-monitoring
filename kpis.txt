@@ -11,7 +11,6 @@ bbs.LRPsRunning,-1
 bbs.RequestLatency,-1
 DopplerServer.doppler.shedEnvelopes,5
 DopplerServer.listeners.totalReceivedMessageCount,5
-DopplerServer.TruncatingBuffer.totalDroppedMessages,5
 gorouter.bad_gateways,-1
 gorouter.latency,-1
 gorouter.ms_since_last_registry_update,30
