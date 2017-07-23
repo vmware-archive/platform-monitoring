@@ -96,7 +96,7 @@ jobs:
 
             cd cf-deployment
             export BOSH_CA_CERT=`cat ../deployments-metrics/bosh-deployments/gcp/platform-ops/director_cert`
-            bosh2 --ca-cert ../deployments-metrics/bosh-deployments/gcp/platform-ops/director_cert alias-env platform-ops  -e https://104.196.55.182:25555
+            bosh2 --ca-cert ../deployments-metrics/bosh-deployments/gcp/platform-ops/director_cert alias-env platform-ops  -e $BOSH_URL
 
             bosh2 -n log-in
 
