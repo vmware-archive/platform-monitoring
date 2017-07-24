@@ -38,8 +38,8 @@ resources:
     url: https://hooks.slack.com/services/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
 - name: every-weekday-morning
   type: time
-  days: [Monday, Tuesday, Wednesday, Thursday, Friday]
   source:
+    days: [Monday, Tuesday, Wednesday, Thursday, Friday]
     start: 02:00 AM
     stop: 03:00 AM
     location: America/Boise
@@ -95,28 +95,30 @@ jobs:
             unset BOSH_USER
 
             cd cf-deployment
-            export BOSH_CA_CERT=`cat ../deployments-metrics/bosh-deployments/gcp/platform-ops/director_cert`
-            bosh2 --ca-cert ../deployments-metrics/bosh-deployments/gcp/platform-ops/director_cert alias-env platform-ops  -e $BOSH_URL
+            export BOSH_CA_CERT=`cat ../deployments-metrics/bosh-deployments/gcp/healthwatch/bosh2_director_ca_cert.pem`
+            bosh2 --ca-cert ../deployments-metrics/bosh-deployments/gcp/healthwatch/bosh2_director_ca_cert.pem alias-env healthwatch  -e $BOSH_URL
 
             bosh2 -n log-in
 
             bosh2 -n -d cf delete-deployment
 
-            bosh2 -n -d cf deploy --vars-store=../deployments-metrics/bosh-deployments/gcp/platform-ops/cf-deployment-vars.yml -v system_domain=$SYS_DOMAIN cf-deployment.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_platform_monitoring_group.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_app_metrics_processing.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_3_diego_cells.yml -o ../deployments-metrics/bosh-deployments/gcp/platform-ops/enable_3_gorouters.yml -o operations/experimental/locket.yml
+            bosh2 -n -d cf deploy --vars-store=../deployments-metrics/bosh-deployments/gcp/healthwatch/cf-deployment-vars.yml \
+            -v system_domain=cf.healthwatch.gcp.pcf-metrics.com  cf-deployment.yml \
+            -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_platform_monitoring_group.yml \
+            -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_app_metrics_processing.yml \
+            -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_diego_cells.yml \
+            -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_gorouters.yml \
+            -o operations/experimental/locket.yml
 
             bosh2 -n -d platform-monitoring-app-dev run-errand push-apps
 
     on_failure:
       put: slack-alert
-      inputs:
-      - name: results
       params:
         text: "cf-deployment failed "
         username: KPI Bot
     on_success:
       put: slack-alert
-      inputs:
-      - name: results
       params:
         text: "cf-deployment succeeded! "
         username: KPI Bot
@@ -223,24 +225,18 @@ jobs:
             bosh cleanup --all
             bosh releases > results/cf_version
 
-            cf unbind-service logspinner kpi-cups
-            cf delete-service kpi-cups -f
-            cf delete logspinner -r -f
+
             cf delete 500-error -r -f
             cf delete bad-gateway -r -f
             exit $FAIL
 
     on_failure:
       put: slack-alert
-      inputs:
-      - name: results
       params:
         text: "The KPI Validator pipeline failed! \n $( cat results/missing_kpis ) \n $( cat results/mismatched_times ) \n Release Versions: \n $( cat results/cf_version ) "
         username: KPI Bot
     on_success:
       put: slack-alert
-      inputs:
-      - name: results
       params:
         text: "The KPI Validator pipeline succeeded! "
         username: KPI Bot
