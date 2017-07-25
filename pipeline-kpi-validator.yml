@@ -100,14 +100,13 @@ jobs:
 
             bosh2 -n log-in
 
-            bosh2 -n -d cf delete-deployment
-
             bosh2 -n -d cf deploy --vars-store=../deployments-metrics/bosh-deployments/gcp/healthwatch/cf-deployment-vars.yml \
             -v system_domain=cf.healthwatch.gcp.pcf-metrics.com  cf-deployment.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_platform_monitoring_group.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_app_metrics_processing.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_diego_cells.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_gorouters.yml \
+            -o operations/experimental/enable-rlp.yml
             -o operations/experimental/locket.yml
 
             bosh2 -n -d platform-monitoring-app-dev run-errand push-apps
