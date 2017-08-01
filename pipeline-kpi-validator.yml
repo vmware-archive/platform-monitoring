@@ -99,6 +99,7 @@ jobs:
             bosh2 --ca-cert ../deployments-metrics/bosh-deployments/gcp/healthwatch/bosh2_director_ca_cert.pem alias-env healthwatch  -e $BOSH_URL
 
             bosh2 -n log-in
+            bosh2 -n -d cf delete-deployment
 
             bosh2 -n -d cf deploy --vars-store=../deployments-metrics/bosh-deployments/gcp/healthwatch/cf-deployment-vars.yml \
             -v system_domain=cf.healthwatch.gcp.pcf-metrics.com  cf-deployment.yml \
@@ -106,10 +107,10 @@ jobs:
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_app_metrics_processing.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_diego_cells.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_gorouters.yml \
-            -o operations/experimental/enable-rlp.yml
+            -o operations/experimental/enable-rlp.yml \
             -o operations/experimental/locket.yml
 
-            bosh2 -n -d platform-monitoring-app-dev run-errand push-apps
+            bosh2 -n -d healthwatch-app-dev run-errand push-apps
 
     on_failure:
       put: slack-alert
