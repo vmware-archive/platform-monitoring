@@ -38,7 +38,6 @@ public class CloudfoundryClientWrapper {
         cfEvents
             .filter(e -> e.getEventType().equals(EventType.COUNTER_EVENT) || e.getEventType().equals(EventType.VALUE_METRIC))
             .subscribe(e -> {
-                System.out.println("Adding metric: "+getName(e)+" "+ e.getIndex());
                 metricCounter.addMetric(getName(e), e.getIndex());
             });
         Thread.sleep(duration);
