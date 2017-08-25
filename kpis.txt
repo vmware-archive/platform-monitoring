@@ -12,6 +12,7 @@ bbs.RequestLatency,-1
 DopplerServer.doppler.shedEnvelopes,5
 DopplerServer.listeners.totalReceivedMessageCount,5
 gorouter.bad_gateways,-1
+gorouter.file_descriptors,5
 gorouter.latency,-1
 gorouter.ms_since_last_registry_update,30
 gorouter.responses.5xx,-1
@@ -28,5 +29,5 @@ rep.UnhealthyCell,30
 route_emitter.RouteEmitterSyncDuration,60
 locket.ActiveLocks,-1
 locket.ActivePresences,-1
-loggregator.doppler.ingress,5
-loggregator.doppler.dropped,5
+loggregator.doppler.ingress,-1
+loggregator.doppler.dropped,-1
