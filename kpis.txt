@@ -29,5 +29,5 @@ rep.UnhealthyCell,30
 route_emitter.RouteEmitterSyncDuration,60
 locket.ActiveLocks,-1
 locket.ActivePresences,-1
-loggregator.doppler.ingress,-1
-loggregator.doppler.dropped,-1
+loggregator.doppler.ingress,5
+loggregator.doppler.dropped,5
