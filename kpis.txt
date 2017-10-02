@@ -18,6 +18,7 @@ gorouter.ms_since_last_registry_update,30
 gorouter.responses.5xx,-1
 gorouter.total_requests,-1
 gorouter.total_routes,30
+gorouter.backend_exhausted_conns,5
 rep.CapacityRemainingContainers,-1
 rep.CapacityTotalContainers,-1
 rep.CapacityRemainingDisk,60
