@@ -106,9 +106,7 @@ jobs:
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_platform_monitoring_group.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_app_metrics_processing.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_diego_cells.yml \
-            -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_gorouters.yml \
-            -o operations/experimental/enable-rlp.yml \
-            -o operations/experimental/locket.yml
+            -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_gorouters.yml
 
             bosh2 -n -d healthwatch-app-dev run-errand push-apps
 
