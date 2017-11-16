@@ -15,6 +15,7 @@ gorouter.bad_gateways,-1
 gorouter.file_descriptors,5
 gorouter.latency,-1
 gorouter.ms_since_last_registry_update,30
+gorouter.registry_message.route_emitter,-1
 gorouter.responses.5xx,-1
 gorouter.total_requests,-1
 gorouter.total_routes,30
@@ -27,6 +28,7 @@ rep.CapacityTotalDisk,-1
 rep.CapacityTotalMemory,-1
 rep.RepBulkSyncDuration,30
 rep.UnhealthyCell,30
+route_emitter.MessagesEmitted,30
 route_emitter.RouteEmitterSyncDuration,60
 locket.ActiveLocks,-1
 locket.ActivePresences,-1
