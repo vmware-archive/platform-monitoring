@@ -28,7 +28,7 @@ rep.CapacityTotalDisk,-1
 rep.CapacityTotalMemory,-1
 rep.RepBulkSyncDuration,30
 rep.UnhealthyCell,30
-route_emitter.MessagesEmitted,30
+route_emitter.MessagesEmitted,-1
 route_emitter.RouteEmitterSyncDuration,60
 locket.ActiveLocks,-1
 locket.ActivePresences,-1
