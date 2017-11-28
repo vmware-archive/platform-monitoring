@@ -70,7 +70,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: pivotalcf/1.7_metrix
+          repository: pcfmetrics/platform_ops
           tag: latest
 
       inputs:
@@ -96,20 +96,19 @@ jobs:
 
             cd cf-deployment
             export BOSH_CA_CERT=`cat ../deployments-metrics/bosh-deployments/gcp/healthwatch/bosh2_director_ca_cert.pem`
-            bosh2 --ca-cert ../deployments-metrics/bosh-deployments/gcp/healthwatch/bosh2_director_ca_cert.pem alias-env healthwatch  -e $BOSH_URL
 
-            bosh2 -n log-in
-            bosh2 -n -d cf delete-deployment
+            bosh -n log-in
+            #bosh -n -d cf delete-deployment
 
-            bosh2 -n -d cf deploy --vars-store=../deployments-metrics/bosh-deployments/gcp/healthwatch/cf-deployment-vars.yml \
+            bosh -n -d cf deploy --vars-store=../deployments-metrics/bosh-deployments/gcp/healthwatch/cf-deployment-vars.yml \
             -v system_domain=cf.healthwatch.gcp.pcf-metrics.com  cf-deployment.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_platform_monitoring_group.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_app_metrics_processing.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_diego_cells.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_gorouters.yml
 
-            bosh2 -n -d healthwatch-app-dev run-errand push-apps
-
+            bosh -n -d healthwatch-app-dev-v1-1 run-errand push-apps
+            bosh -n clean-up --all
     on_failure:
       put: slack-alert
       params:
@@ -134,7 +133,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: pivotalcf/1.7_metrix
+          repository: pcfmetrics/platform_ops
           tag: latest
 
       inputs:
@@ -169,7 +168,7 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: pivotalcf/1.7_metrix
+          repository: pcfmetrics/platform_ops
           tag: latest
 
       inputs:
@@ -218,9 +217,7 @@ jobs:
             mv platform-monitoring/mismatched_times results
 
             # BOSH DEPLOYMENT COMMANDS, NOT OM
-            bosh -n target $BOSH_URL
-            bosh login $BOSH_USER $BOSH_PASSWORD
-            bosh cleanup --all
+            bosh clean-up --all
             bosh releases > results/cf_version
 
 
