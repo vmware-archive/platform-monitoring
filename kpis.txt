@@ -17,7 +17,7 @@ gorouter.bad_gateways,-1
 gorouter.file_descriptors,5
 gorouter.latency,-1
 gorouter.ms_since_last_registry_update,30
-gorouter.registry_message.route_emitter,-1
+gorouter.registry_message.route-emitter,-1
 gorouter.responses.5xx,-1
 gorouter.total_requests,-1
 gorouter.total_routes,30
