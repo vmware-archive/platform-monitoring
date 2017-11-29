@@ -98,7 +98,7 @@ jobs:
             export BOSH_CA_CERT=`cat ../deployments-metrics/bosh-deployments/gcp/healthwatch/bosh2_director_ca_cert.pem`
 
             bosh -n log-in
-            #bosh -n -d cf delete-deployment
+            bosh -n -d cf delete-deployment
 
             bosh -n -d cf deploy --vars-store=../deployments-metrics/bosh-deployments/gcp/healthwatch/cf-deployment-vars.yml \
             -v system_domain=cf.healthwatch.gcp.pcf-metrics.com  cf-deployment.yml \
