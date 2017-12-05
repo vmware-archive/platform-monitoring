@@ -107,6 +107,7 @@ jobs:
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_diego_cells.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_gorouters.yml
 
+            bosh -n -d boshhmforwarder restart
             bosh -n -d healthwatch-app-dev-v1-1 run-errand push-apps
             bosh -n clean-up --all
     on_failure:
