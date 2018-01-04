@@ -100,14 +100,18 @@ jobs:
             bosh -n log-in
             bosh -n -d cf delete-deployment
 
-            bosh -n -d cf deploy --vars-store=../deployments-metrics/bosh-deployments/gcp/healthwatch/cf-deployment-vars.yml \
-            -v system_domain=cf.healthwatch.gcp.pcf-metrics.com  cf-deployment.yml \
+            bosh -n -d cf deploy --vars-store=../deployments-metrics/bosh-deployments/gcp/healthwatch/cf-deployment-vars.yml cf-deployment.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_platform_monitoring_group.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_app_metrics_processing.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_diego_cells.yml \
+            -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_notifications.yml \
+            -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_permissive_default_security_group.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_gorouters.yml
 
             bosh -n -d boshhmforwarder restart
+
+            bosh -n -d notifications run-errand deploy-notifications
+            bosh -n -d event-alerts run-errand deploy-pcf-event-alerts
             bosh -n -d healthwatch-app-dev-v1-1 run-errand push-apps
             bosh -n clean-up --all
     on_failure:
