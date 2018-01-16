@@ -106,7 +106,8 @@ jobs:
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_diego_cells.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_notifications.yml \
             -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_permissive_default_security_group.yml \
-            -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_gorouters.yml
+            -o ../deployments-metrics/bosh-deployments/gcp/healthwatch/enable_3_gorouters.yml \
+            -o operations/experimental/use-bosh-dns-for-containers.yml
 
             bosh -n -d boshhmforwarder restart
 
