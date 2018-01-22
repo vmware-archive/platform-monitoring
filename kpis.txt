@@ -11,8 +11,6 @@ bbs.LRPsExtra,30
 bbs.LRPsMissing,30
 bbs.LRPsRunning,-1
 bbs.RequestLatency,-1
-DopplerServer.doppler.shedEnvelopes,5
-DopplerServer.listeners.totalReceivedMessageCount,5
 gorouter.bad_gateways,-1
 gorouter.file_descriptors,5
 gorouter.latency,-1
