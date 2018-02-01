@@ -14,6 +14,7 @@ bbs.RequestLatency,-1
 gorouter.bad_gateways,-1
 gorouter.file_descriptors,5
 gorouter.latency,-1
+gorouter.latency.uaa,-1
 gorouter.ms_since_last_registry_update,30
 gorouter.registry_message.route-emitter,-1
 gorouter.responses.5xx,-1
@@ -38,3 +39,6 @@ locket.ActiveLocks,-1
 locket.ActivePresences,-1
 loggregator.doppler.ingress,5
 loggregator.doppler.dropped,5
+system.cpu.user,-1
+uaa.requests.global.completed.count,5
+uaa.server.inflight.count,5
