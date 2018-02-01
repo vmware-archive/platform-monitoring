@@ -11,6 +11,7 @@ bbs.LRPsExtra,30
 bbs.LRPsMissing,30
 bbs.LRPsRunning,-1
 bbs.RequestLatency,-1
+bosh-system-metrics-forwarder.system.cpu.user,-1
 gorouter.backend_exhausted_conns,5
 gorouter.bad_gateways,-1
 gorouter.file_descriptors,5
@@ -39,6 +40,5 @@ rep.RepBulkSyncDuration,30
 rep.UnhealthyCell,30
 route_emitter.MessagesEmitted,-1
 route_emitter.RouteEmitterSyncDuration,60
-system.cpu.user,-1
 uaa.requests.global.completed.count,5
 uaa.server.inflight.count,5
