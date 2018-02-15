@@ -25,7 +25,7 @@ gorouter.total_routes,30
 locket.ActiveLocks,-1
 locket.ActivePresences,-1
 loggregator.doppler.dropped,5
-loggregator.doppler.ingress,-1
+loggregator.doppler.ingress,5
 rep.CapacityAllocatedDisk,-1
 rep.CapacityAllocatedMemory,-1
 rep.CapacityRemainingContainers,-1
