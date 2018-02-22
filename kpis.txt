@@ -26,8 +26,8 @@ locket.ActiveLocks,-1
 locket.ActivePresences,-1
 loggregator.doppler.dropped,5
 loggregator.doppler.ingress,5
-loggregator.metron.dropped,20
-loggregator.metron.ingress,20
+loggregator.metron.dropped,30
+loggregator.metron.ingress,30
 rep.CapacityAllocatedDisk,-1
 rep.CapacityAllocatedMemory,-1
 rep.CapacityRemainingContainers,-1
