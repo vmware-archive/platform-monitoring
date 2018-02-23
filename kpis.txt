@@ -40,7 +40,7 @@ rep.ContainerUsageDisk,-1
 rep.ContainerUsageMemory,-1
 rep.RepBulkSyncDuration,30
 rep.UnhealthyCell,30
-route_emitter.MessagesEmitted,-1
+route_emitter.HTTPRouteNATSMessagesEmitted,-1
 route_emitter.RouteEmitterSyncDuration,60
 uaa.requests.global.completed.count,5
 uaa.server.inflight.count,5
