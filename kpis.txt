@@ -4,11 +4,11 @@ auctioneer.AuctioneerLRPAuctionsStarted,-1
 auctioneer.AuctioneerTaskAuctionsFailed,-1
 auctioneer.LockHeld,-1
 bbs.ConvergenceLRPDuration,-1
-bbs.CrashedActualLRPs,30
-bbs.Domain.cf-apps,30
+bbs.CrashedActualLRPs,15
+bbs.Domain.cf-apps,15
 bbs.LockHeld,-1
-bbs.LRPsExtra,30
-bbs.LRPsMissing,30
+bbs.LRPsExtra,15
+bbs.LRPsMissing,15
 bbs.LRPsRunning,-1
 bbs.RequestLatency,-1
 bosh-system-metrics-forwarder.system.cpu.user,-1
