@@ -3,7 +3,9 @@
 */build
 */.gradle
 .gradle
+.idea
 build
+out/
 *.iml
 dashboard_app/src/main/resources/static
 *node_modules/
