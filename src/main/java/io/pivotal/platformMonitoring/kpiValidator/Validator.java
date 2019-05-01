@@ -40,15 +40,6 @@ public class Validator {
         System.exit(0);
     }
 
-    private static Map<String, Integer> readMetrics() throws IOException {
-        Stream<String> lines = Files.lines(Paths.get(KPI_FILE_NAME));
-        Map<String, Integer> resultMap =
-            lines.map(line -> line.split(","))
-                .collect(Collectors.toMap(line -> line[0], line -> Integer.parseInt(line[1])));
-        lines.close();
-        return resultMap;
-    }
-
     public void run(MetricCounter metricCounter) throws Exception {
         HashSet<String> allGatheredMetrics = new HashSet<>();
         metricCounter.getMetricMap().keySet().stream().forEach(allGatheredMetrics::add);
@@ -89,6 +80,16 @@ public class Validator {
         }else if(!mismatchedEmissionTimes.isEmpty()){
             throw new RuntimeException(MISMATCHED_EMISSION_TIMES);
         }
+    }
+
+    private static Map<String, Integer> readMetrics() throws IOException {
+        Stream<String> lines = Files.lines(Paths.get(KPI_FILE_NAME));
+        Map<String, Integer> resultMap =
+            lines.filter(line -> !line.startsWith("#"))
+                .map(line -> line.split(","))
+                .collect(Collectors.toMap(line -> line[0], line -> Integer.parseInt(line[1])));
+        lines.close();
+        return resultMap;
     }
 
     private void filePrint(String fileName, String format, Stream<String> stream) throws IOException{
