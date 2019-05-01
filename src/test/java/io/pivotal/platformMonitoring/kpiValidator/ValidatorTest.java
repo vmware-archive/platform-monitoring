@@ -37,7 +37,6 @@ public class ValidatorTest {
     @Test
     public void itExitsWithOneIfMissingKPIs() throws Exception {
         try {
-
             new Validator().run(new MetricCounter());
         } catch (RuntimeException e) {
             assert (e.getMessage()).equals(Validator.MISSING_KPIS);
@@ -63,7 +62,13 @@ public class ValidatorTest {
 
     private static MetricCounter receivedMetrics() throws IOException {
         MetricCounter metricCounter = new MetricCounter();
-        Files.lines(Paths.get(KPI_FILE_NAME)).forEach(kpi -> metricCounter.addMetric(kpi.split(",")[0], "some-envelope-1"));
+        Files.lines(Paths.get(KPI_FILE_NAME)).forEach(kpi -> {
+            if (kpi.startsWith("#")) {
+                // skip commented out KPIs
+            } else {
+                metricCounter.addMetric(kpi.split(",")[0], "some-envelope-1");
+            }
+        });
         return metricCounter;
     }
 

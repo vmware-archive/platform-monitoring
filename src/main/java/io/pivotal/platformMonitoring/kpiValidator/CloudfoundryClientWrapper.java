@@ -48,9 +48,24 @@ public class CloudfoundryClientWrapper {
 
     private static String getName(Envelope e) {
         if (e.getEventType().equals(EventType.VALUE_METRIC)) {
-            return e.getOrigin() + "." + e.getValueMetric().getName();
+            return getOrigin(e) + "." + e.getValueMetric().getName();
         } else {
-            return e.getOrigin() + "." + e.getCounterEvent().getName();
+            return getOrigin(e) + "." + e.getCounterEvent().getName();
         }
+    }
+
+    private static String getOrigin(Envelope e) {
+        if (isNullOrEmpty(e.getOrigin())) {
+            return e.getTags().get("source_id");
+        } else {
+            return e.getOrigin();
+        }
+    }
+
+    private static boolean isNullOrEmpty(String s) {
+        if (s != null && !s.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }
