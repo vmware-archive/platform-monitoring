@@ -14,7 +14,8 @@ import java.util.UUID;
 
 public class CloudfoundryClientWrapper {
     private static Logger log = Logger.getLogger(CloudfoundryClientWrapper.class);
-    public static MetricCounter getValueMetricsAndCounterEvents(String api, String username, String password, long duration) throws Exception{
+
+    public static MetricCounter getValueMetricsAndCounterEvents(String api, String username, String password, long duration) throws Exception {
         log.info("Started Capturing Metrics: " + Calendar.getInstance().getTime() + " " + duration);
         MetricCounter metricCounter = new MetricCounter();
         DefaultConnectionContext defaultConnectionContext = DefaultConnectionContext.builder()
@@ -46,10 +47,10 @@ public class CloudfoundryClientWrapper {
     }
 
     private static String getName(Envelope e) {
-        if(e.getEventType().equals(EventType.VALUE_METRIC)){
-            return e.getOrigin()+"."+e.getValueMetric().getName();
-        }else{
-            return e.getOrigin()+"."+e.getCounterEvent().getName();
+        if (e.getEventType().equals(EventType.VALUE_METRIC)) {
+            return e.getOrigin() + "." + e.getValueMetric().getName();
+        } else {
+            return e.getOrigin() + "." + e.getCounterEvent().getName();
         }
     }
 }

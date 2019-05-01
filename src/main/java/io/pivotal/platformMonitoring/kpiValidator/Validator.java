@@ -33,7 +33,7 @@ public class Validator {
             log.info("Running validator");
             MetricCounter metricCounter = CloudfoundryClientWrapper.getValueMetricsAndCounterEvents(CF_API, CF_USERNAME, CF_PASSWORD, new Double(RUN_TIME_MINUTES * 60 * 1000).longValue());
             validator.run(metricCounter);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -57,7 +57,7 @@ public class Validator {
             .map(Map.Entry::getKey)
             .collect(Collectors.toList());
 
-        if(missingKpis.isEmpty()) {
+        if (missingKpis.isEmpty()) {
             log.info(NO_MISSING_KPIS);
         } else {
             print(MISSING_KPIS, missingKpis.stream());
@@ -67,7 +67,7 @@ public class Validator {
         HashSet<String> mismatchedEmissionTimes = checkHits(kpiMap, metricCounter);
         print("MISMATCHED FREQUENCIES", mismatchedEmissionTimes.stream());
 
-        if(mismatchedEmissionTimes.isEmpty()) {
+        if (mismatchedEmissionTimes.isEmpty()) {
             log.info(EMISSION_TIMES_CORRECT);
             filePrint("mismatched_times", "%s", Arrays.asList(EMISSION_TIMES_CORRECT).stream());
         } else {
@@ -75,9 +75,9 @@ public class Validator {
             filePrint("mismatched_times", "WRONG FREQUENCY: %s%s", mismatchedEmissionTimes.stream());
         }
 
-        if(!missingKpis.isEmpty()){
+        if (!missingKpis.isEmpty()) {
             throw new RuntimeException(MISSING_KPIS);
-        }else if(!mismatchedEmissionTimes.isEmpty()){
+        } else if (!mismatchedEmissionTimes.isEmpty()) {
             throw new RuntimeException(MISMATCHED_EMISSION_TIMES);
         }
     }
@@ -92,7 +92,7 @@ public class Validator {
         return resultMap;
     }
 
-    private void filePrint(String fileName, String format, Stream<String> stream) throws IOException{
+    private void filePrint(String fileName, String format, Stream<String> stream) throws IOException {
         PrintWriter writer = new PrintWriter(fileName, "UTF-8");
         stream
             .map(m -> String.format(format, m, System.lineSeparator()))
@@ -115,17 +115,16 @@ public class Validator {
 
         kpiMap.keySet().stream()
             .forEach(name -> {
-                if(receivedMetrics.containsKey(name)) {
+                if (receivedMetrics.containsKey(name)) {
                     double expectedHits = RUN_TIME_MINUTES * 60 / kpiMap.get(name);
-                    receivedMetrics.get(name).keySet().stream().forEach(envelope ->{
+                    receivedMetrics.get(name).keySet().stream().forEach(envelope -> {
                         int actualHits = receivedMetrics.get(name).get(envelope).intValue();
-                        if(expectedHits > 0) {
-                            if(actualHits < expectedHits-DEVIATION || actualHits > expectedHits+DEVIATION) {
-                                wrongEmissionTimes.add(name+":"+envelope+" actual hits: "+actualHits+" expected hits: "+expectedHits);
+                        if (expectedHits > 0) {
+                            if (actualHits < expectedHits - DEVIATION || actualHits > expectedHits + DEVIATION) {
+                                wrongEmissionTimes.add(name + ":" + envelope + " actual hits: " + actualHits + " expected hits: " + expectedHits);
                             }
                         }
                     });
-
 
 
                 }

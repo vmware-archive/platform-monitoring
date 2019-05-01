@@ -35,17 +35,17 @@ public class ValidatorTest {
     }
 
     @Test
-    public void itExitsWithOneIfMissingKPIs() throws Exception{
+    public void itExitsWithOneIfMissingKPIs() throws Exception {
         try {
 
             new Validator().run(new MetricCounter());
-        } catch( RuntimeException e) {
-            assert(e.getMessage()).equals(Validator.MISSING_KPIS);
+        } catch (RuntimeException e) {
+            assert (e.getMessage()).equals(Validator.MISSING_KPIS);
         }
     }
 
     @Test
-    public void itExitsWithOneIfBadFrequency() throws Exception{
+    public void itExitsWithOneIfBadFrequency() throws Exception {
         try {
             MetricCounter metricCounter = receivedMetrics();
             metricCounter.addMetric("route_emitter.RouteEmitterSyncDuration", "some-envelope-1");
@@ -56,8 +56,8 @@ public class ValidatorTest {
             metricCounter.addMetric("route_emitter.RouteEmitterSyncDuration", "some-envelope-1");
 
             new Validator().run(metricCounter);
-        } catch( RuntimeException e) {
-            assert(e.getMessage()).equals(Validator.MISMATCHED_EMISSION_TIMES);
+        } catch (RuntimeException e) {
+            assert (e.getMessage()).equals(Validator.MISMATCHED_EMISSION_TIMES);
         }
     }
 
