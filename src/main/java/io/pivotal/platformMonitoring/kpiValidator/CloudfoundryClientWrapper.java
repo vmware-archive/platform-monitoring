@@ -47,10 +47,13 @@ public class CloudfoundryClientWrapper {
     }
 
     private static String getName(Envelope e) {
+        String origin = getOrigin(e);
         if (e.getEventType().equals(EventType.VALUE_METRIC)) {
-            return getOrigin(e) + "." + e.getValueMetric().getName();
+            String name = e.getValueMetric().getName();
+            return origin + "." + name;
         } else {
-            return getOrigin(e) + "." + e.getCounterEvent().getName() + getDirection(e);
+            String name = e.getCounterEvent().getName();
+            return origin + "." + name + getDirection(e, origin, name);
         }
     }
 
@@ -62,8 +65,8 @@ public class CloudfoundryClientWrapper {
         }
     }
 
-    private static String getDirection(Envelope e) {
-        if (e.getTags().containsKey("direction")) {
+    private static String getDirection(Envelope e, String origin, String name) {
+        if (origin.equals("loggregator.doppler") && name.equals("dropped") && e.getTags().containsKey("direction")) {
             return "." + e.getTags().get("direction");
         } else {
             return "";
