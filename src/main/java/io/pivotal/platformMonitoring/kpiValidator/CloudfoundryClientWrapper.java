@@ -50,7 +50,7 @@ public class CloudfoundryClientWrapper {
         if (e.getEventType().equals(EventType.VALUE_METRIC)) {
             return getOrigin(e) + "." + e.getValueMetric().getName();
         } else {
-            return getOrigin(e) + "." + e.getCounterEvent().getName();
+            return getOrigin(e) + "." + e.getCounterEvent().getName() + getDirection(e);
         }
     }
 
@@ -59,6 +59,14 @@ public class CloudfoundryClientWrapper {
             return e.getTags().get("source_id");
         } else {
             return e.getOrigin();
+        }
+    }
+
+    private static String getDirection(Envelope e) {
+        if (e.getTags().containsKey("direction")) {
+            return "." + e.getTags().get("direction");
+        } else {
+            return "";
         }
     }
 
