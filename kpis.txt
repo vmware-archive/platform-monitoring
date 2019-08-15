@@ -36,7 +36,9 @@ gorouter.total_requests,-1
 gorouter.total_routes,30
 locket.ActiveLocks,-1
 locket.ActivePresences,-1
-log-cache.cache-period,60
+# FIXME: log-cache.cache-period should exist after this story has made its way into cf-d:
+#   https://www.pivotaltracker.com/story/show/167911124
+# log-cache.cache-period,60
 loggregator.doppler.dropped.ingress,5
 loggregator.doppler.dropped.egress,5
 loggregator.doppler.ingress,5
