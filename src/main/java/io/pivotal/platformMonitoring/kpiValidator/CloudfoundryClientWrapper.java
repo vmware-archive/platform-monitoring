@@ -66,6 +66,9 @@ public class CloudfoundryClientWrapper {
     }
 
     private static String getDirection(Envelope e, String origin, String name) {
+        if (origin == null) {
+            return "";
+        }
         if (origin.equals("loggregator.doppler") && name.equals("dropped") && e.getTags().containsKey("direction")) {
             return "." + e.getTags().get("direction");
         } else {

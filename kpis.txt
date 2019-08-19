@@ -60,7 +60,6 @@ rep.CapacityTotalMemory,-1
 rep.ContainerUsageDisk,-1
 rep.ContainerUsageMemory,-1
 rep.RepBulkSyncDuration,30
-# rep.GardenHealthCheckFailed replaces rep.UnhealthyCell. HW update story: https://www.pivotaltracker.com/story/show/166487693
 rep.GardenHealthCheckFailed,30
 route_emitter.HTTPRouteNATSMessagesEmitted,-1
 route_emitter.RouteEmitterSyncDuration,60
