@@ -36,19 +36,12 @@ gorouter.total_requests,-1
 gorouter.total_routes,30
 locket.ActiveLocks,-1
 locket.ActivePresences,-1
-# FIXME: log-cache.cache-period should exist after this story has made its way into cf-d:
-#   https://www.pivotaltracker.com/story/show/167911124
-# log-cache.cache-period,60
-loggregator.doppler.dropped.ingress,5
 loggregator.doppler.dropped.egress,5
+loggregator.doppler.dropped.ingress,5
 loggregator.doppler.ingress,5
 loggregator.rlp.dropped,60
 loggregator.rlp.ingress,60
 loggregator.trafficcontroller.doppler_proxy.slow_consumer,60
-#mysql./mysql/available,30
-#mysql./mysql/galera/wsrep_cluster_size,30
-#mysql./mysql/galera/wsrep_cluster_status,30
-#mysql./mysql/galera/wsrep_ready,30
 rep.CapacityAllocatedDisk,-1
 rep.CapacityAllocatedMemory,-1
 rep.CapacityRemainingContainers,-1
@@ -59,9 +52,22 @@ rep.CapacityTotalDisk,-1
 rep.CapacityTotalMemory,-1
 rep.ContainerUsageDisk,-1
 rep.ContainerUsageMemory,-1
-rep.RepBulkSyncDuration,30
 rep.GardenHealthCheckFailed,30
+rep.RepBulkSyncDuration,30
 route_emitter.HTTPRouteNATSMessagesEmitted,-1
 route_emitter.RouteEmitterSyncDuration,60
 uaa.requests.global.completed.count,5
 uaa.server.inflight.count,5
+
+# https://www.pivotaltracker.com/story/show/167472054
+# loggregator.syslog_agent.dropped{direction:egress}
+# loggregator.syslog_agent.ingress{scope:all_drains}
+
+#   https://www.pivotaltracker.com/story/show/167911124
+# FIXME: log-cache.cache-period should exist after this story has made its way into cf-d:
+# log-cache.cache-period,60
+
+#mysql./mysql/available,30
+#mysql./mysql/galera/wsrep_cluster_size,30
+#mysql./mysql/galera/wsrep_cluster_status,30
+#mysql./mysql/galera/wsrep_ready,30
