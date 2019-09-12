@@ -85,7 +85,8 @@ public class Validator {
     private static Map<String, Integer> readMetrics() throws IOException {
         Stream<String> lines = Files.lines(Paths.get(KPI_FILE_NAME));
         Map<String, Integer> resultMap =
-            lines.filter(line -> !line.startsWith("#"))
+            lines
+                .filter(line -> !(line.isEmpty() || line.startsWith("#")))
                 .map(line -> line.split(","))
                 .collect(Collectors.toMap(line -> line[0], line -> Integer.parseInt(line[1])));
         lines.close();
