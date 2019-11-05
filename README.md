@@ -1,4 +1,8 @@
-# platform-monitoring
+# platform-monitoring (ARCHIVED)
+
+The purpose of the KPI Validator Job has been replaced by the [validate-expected-metrics errand](https://github.com/pivotal-cf/healthwatch-release/tree/v1.7/jobs/validate-expected-metrics) in the healthwatch-release repo.
+
+---
 
 KPI Validator Job: https://concourse.cf-denver.com/teams/healthwatch/pipelines/healthwatch-v1.6/jobs/validate-kpis
 * Runs every morning at 6am Denver time (Mountain Time)
